@@ -3,7 +3,7 @@ from cars.models import Car, CarModel
 from city.serializers import CitySerializer
 from customers.models import Customer
 from users.models import CustomUser
-from .models import Lead as Lead
+from .models import Quote as Quote
 
 
 class CarMakeSerializer(serializers.ModelSerializer):
@@ -30,25 +30,16 @@ class CustomerSerializer(serializers.ModelSerializer):
         ]
 
 
-class ClientSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CustomUser
-        fields = [
-            'id', 'full_name', 'email'
-        ]
-
-
-class LeadSerializer(serializers.ModelSerializer):
+class QuoteSerializer(serializers.ModelSerializer):
     car_make = serializers.CharField(source='car_make.name')
     car_model = serializers.CharField(source='car_model.name')
     pick_up_address = CitySerializer()
     drop_off_address = CitySerializer()
     customer = CustomerSerializer()
-    clients = ClientSerializer(many=True)
 
     class Meta:
-        model = Lead
+        model = Quote
         fields = [
             'id', 'car_make', 'car_model', 'car_year', 'pick_up_address', 'drop_off_address', 'pick_up_date',
-            'customer', 'clients', 'created_at'
+            'customer', 'created_at'
         ]

@@ -39,11 +39,10 @@ INSTALLED_APPS = [
     'corsheaders',
     # apps start here
     'users',
-    'leads.apps.LeadsConfig',
-    'keys.apps.KeysConfig',
     'city.apps.CityConfig',
     'cars.apps.CarsConfig',
     'customers.apps.CustomersConfig',
+    'quotes.apps.QuotesConfig',
 ]
 
 MIDDLEWARE = [
