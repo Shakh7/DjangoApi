@@ -25,7 +25,7 @@ class QuoteListApiView(ListAPIView):
 
         # Perform the search based on the query parameters
         if customer_query_param:
-            queryset = queryset.filter(customer__name__icontains=customer_query_param)
+            queryset = queryset.filter(customer__first_name__icontains=customer_query_param)
 
         if car_query_param:
             queryset = queryset.filter(car_make__name__icontains=car_query_param)
