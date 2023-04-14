@@ -13,8 +13,24 @@ from .serializers import QuoteSerializer as QuoteSerializer
 
 class QuoteListApiView(ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
-    queryset = Quote.objects.select_related('car_make', 'customer').prefetch_related('clients').order_by('-created_at')
     serializer_class = QuoteSerializer
+
+    def get_queryset(self):
+        queryset = Quote.objects.select_related('car_make', 'customer').prefetch_related('clients').order_by(
+            '-created_at')
+
+        # Get the customer and car query parameters from the request
+        customer_query_param = self.request.query_params.get('customer')
+        car_query_param = self.request.query_params.get('car')
+
+        # Perform the search based on the query parameters
+        if customer_query_param:
+            queryset = queryset.filter(customer__name__icontains=customer_query_param)
+
+        if car_query_param:
+            queryset = queryset.filter(car_make__name__icontains=car_query_param)
+
+        return queryset
 
 
 class QuoteCreateView(CreateAPIView):
