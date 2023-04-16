@@ -1,4 +1,5 @@
 # Create your views here.
+from django.db.models import Q
 from rest_framework import permissions
 from rest_framework import status
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView
@@ -28,7 +29,8 @@ class QuoteListApiView(ListAPIView):
             queryset = queryset.filter(customer__first_name__icontains=customer_query_param)
 
         if car_query_param:
-            queryset = queryset.filter(car_make__name__icontains=car_query_param)
+            queryset = queryset.filter(
+                Q(car_make__name__icontains=car_query_param) | Q(car_model__name__icontains=car_query_param))
 
         return queryset
 
