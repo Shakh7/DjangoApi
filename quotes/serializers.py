@@ -61,7 +61,7 @@ class QuoteSerializer(serializers.Serializer):
             'state_code': obj.pick_up_address.state_code,
         }
 
-    def get_destination(self, obj):
+    def get_departure(self, obj):
         return {
             'zip_code': obj.drop_off_address.zip_code,
             'city_name': obj.drop_off_address.city_name,
