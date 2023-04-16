@@ -23,10 +23,17 @@ class QuoteListApiView(ListAPIView):
         # Get the customer and car query parameters from the request
         customer_query_param = self.request.query_params.get('customer')
         car_query_param = self.request.query_params.get('car')
+        pick_up_address_query_param = self.request.query_params.get('pick_up_address')
+        drop_off_address_query_param = self.request.query_params.get('drop_off_address')
 
         # Perform the search based on the query parameters
         if customer_query_param:
             queryset = queryset.filter(customer__first_name__icontains=customer_query_param)
+
+        if pick_up_address_query_param:
+            queryset = queryset.filter(
+                Q(pick_up_address_zip_code__icontains=pick_up_address_query_param)
+            )
 
         if car_query_param:
             queryset = queryset.filter(
