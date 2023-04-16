@@ -31,6 +31,7 @@ class CustomerSerializer(serializers.ModelSerializer):
 
 
 class QuoteSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
     car_make = serializers.CharField(source='car_make.name')
     car_model = serializers.CharField(source='car_model.name')
     car_year = serializers.IntegerField()
