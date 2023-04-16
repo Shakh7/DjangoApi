@@ -42,4 +42,4 @@ class QuoteSerializer(serializers.Serializer):
     client_names = serializers.SerializerMethodField(method_name='get_client_names')
 
     def get_client_names(self, obj):
-        return list(obj.clients.values_list('username', flat=True))
+        return list(obj.clients.values_list('full_name', flat=True))
