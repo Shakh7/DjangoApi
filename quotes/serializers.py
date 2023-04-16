@@ -49,7 +49,7 @@ class QuoteSerializer(serializers.Serializer):
     destination = serializers.SerializerMethodField(method_name='get_destination')
     departure = serializers.SerializerMethodField(method_name='get_departure')
 
-    created_at = serializers.DateField()
+    created_at = serializers.DateTimeField()
 
     def get_customer(self, obj):
         return {
