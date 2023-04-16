@@ -32,7 +32,9 @@ class QuoteListApiView(ListAPIView):
 
         if pick_up_address_query_param:
             queryset = queryset.filter(
-                Q(pick_up_address__city_name__icontains=pick_up_address_query_param)
+                Q(pick_up_address__city_name__icontains=pick_up_address_query_param) |
+                Q(pick_up_address__state_code__icontains=pick_up_address_query_param) |
+                Q(pick_up_address__zip_code__icontains=pick_up_address_query_param)
             )
 
         if car_query_param:
