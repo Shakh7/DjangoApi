@@ -61,7 +61,7 @@ class QuoteListApiView(ListAPIView):
             queryset = queryset.filter(pick_up_date=pick_up_date_query_param)
 
         if created_at_query_param:
-            date = datetime.fromisoformat(created_at_query_param).date()
+            date = datetime.strptime(created_at_query_param, '%Y-%m-%d').date()
             queryset = queryset.filter(created_at=date)
 
         return queryset
