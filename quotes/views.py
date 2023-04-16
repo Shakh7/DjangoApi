@@ -1,4 +1,5 @@
 # Create your views here.
+from django.db.models import Count
 from rest_framework import permissions
 from rest_framework import status
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView
@@ -16,8 +17,17 @@ class QuoteListApiView(ListAPIView):
     serializer_class = QuoteSerializer
 
     def get_queryset(self):
-        queryset = Quote.objects.select_related('car_make', 'customer').prefetch_related('clients').order_by(
-            '-created_at')
+        queryset = Quote.objects.select_related('car_make__name', 'customer__first_name',
+                                                'customer__last_name').prefetch_related('clients').only('car_make',
+                                                                                                        'car_model',
+                                                                                                        'car_year',
+                                                                                                        'pick_up_address',
+                                                                                                        'drop_off_address',
+                                                                                                        'pick_up_date',
+                                                                                                        'is_operable',
+                                                                                                        'customer',
+                                                                                                        'created_at').annotate(
+            client_count=Count('clients')).order_by('-created_at').distinct()
 
         # Get the customer and car query parameters from the request
         customer_query_param = self.request.query_params.get('customer')
