@@ -42,4 +42,5 @@ class QuoteSerializer(serializers.Serializer):
     client_names = serializers.SerializerMethodField(method_name='get_client_names')
 
     def get_client_names(self, obj):
-        return list(obj.clients.values_list('full_name', flat=True))
+        clients = obj.clients.all()
+        return [{'full_name': client.full_name, 'email': client.email} for client in clients]
