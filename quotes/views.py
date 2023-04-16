@@ -37,6 +37,13 @@ class QuoteListApiView(ListAPIView):
                 Q(pick_up_address__zip_code__icontains=pick_up_address_query_param)
             )
 
+        if drop_off_address_query_param:
+            queryset = queryset.filter(
+                Q(drop_off_address__city_name__icontains=drop_off_address_query_param) |
+                Q(drop_off_address__state_code__icontains=drop_off_address_query_param) |
+                Q(drop_off_address__zip_code__icontains=drop_off_address_query_param)
+            )
+
         if car_query_param:
             queryset = queryset.filter(
                 Q(car_make__name__icontains=car_query_param) | Q(car_model__name__icontains=car_query_param))
