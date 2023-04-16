@@ -44,6 +44,7 @@ class QuoteSerializer(serializers.Serializer):
     def get_customer(self, obj):
         return {
             'full_name': obj.customer.first_name + ' ' + obj.customer.last_name,
+            'email': obj.customer.email
         }
 
     def get_client_names(self, obj):
