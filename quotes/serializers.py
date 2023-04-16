@@ -40,6 +40,7 @@ class QuoteSerializer(serializers.Serializer):
 
     pick_up_date = serializers.DateField()
     is_operable = serializers.BooleanField()
+    is_lead = serializers.BooleanField()
 
     customer = serializers.SerializerMethodField(method_name='get_customer')
     client_names = serializers.SerializerMethodField(method_name='get_client_names')

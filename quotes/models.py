@@ -21,6 +21,8 @@ class Quote(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     clients = models.ManyToManyField(CustomUser, related_name='quotes')
 
+    is_lead = models.BooleanField(default=False)
+
     def clean(self):
         if self.car_model not in self.car_make.models.all():
             raise ValidationError("Selected car model is not included in selected car's models.")
