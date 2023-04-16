@@ -10,7 +10,7 @@ from city.models import City
 from customers.models import Customer
 from .models import Quote as Quote
 from .serializers import QuoteSerializer as QuoteSerializer
-
+from datetime import datetime
 
 class QuoteListApiView(ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -61,7 +61,8 @@ class QuoteListApiView(ListAPIView):
             queryset = queryset.filter(pick_up_date=pick_up_date_query_param)
 
         if created_at_query_param:
-            queryset = queryset.filter(created_at=created_at_query_param)
+            date = datetime.fromisoformat(created_at_query_param).date()
+            queryset = queryset.filter(created_at=date)
 
         return queryset
 
