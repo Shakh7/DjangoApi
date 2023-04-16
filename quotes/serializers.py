@@ -30,16 +30,16 @@ class CustomerSerializer(serializers.ModelSerializer):
         ]
 
 
-class QuoteSerializer(serializers.ModelSerializer):
+class QuoteSerializer(serializers.Serializer):
     car_make = serializers.CharField(source='car_make.name')
     car_model = serializers.CharField(source='car_model.name')
-    pick_up_address = CitySerializer()
-    drop_off_address = CitySerializer()
-    customer = CustomerSerializer()
+    car_year = serializers.IntegerField()
+    pick_up_address = serializers.CharField(source='pick_up_address.get_full_name')
+    drop_off_address = serializers.CharField(source='drop_off_address.get_full_name')
+    pick_up_date = serializers.DateField()
+    is_operable = serializers.BooleanField()
+    customer_name = serializers.CharField(source='customer.get_full_name')
+    client_names = serializers.SerializerMethodField(method_name='get_client_names')
 
-    class Meta:
-        model = Quote
-        fields = [
-            'id', 'car_make', 'car_model', 'car_year', 'pick_up_address', 'drop_off_address', 'pick_up_date',
-            'customer', 'created_at'
-        ]
+    def get_client_names(self, obj):
+        return list(obj.clients.values_list('username', flat=True))
