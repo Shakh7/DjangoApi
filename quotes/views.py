@@ -52,7 +52,8 @@ class QuoteListApiView(ListAPIView):
                 Q(car_make__name__icontains=car_query_param) | Q(car_model__name__icontains=car_query_param))
 
         if is_lead_query_param:
-            queryset = queryset.filter(is_lead=is_lead_query_param)
+            status = True if is_lead_query_param == 'true' else False
+            queryset = queryset.filter(is_lead=status)
 
         return queryset
 
