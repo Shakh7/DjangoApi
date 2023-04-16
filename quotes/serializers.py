@@ -49,6 +49,8 @@ class QuoteSerializer(serializers.Serializer):
     destination = serializers.SerializerMethodField(method_name='get_destination')
     departure = serializers.SerializerMethodField(method_name='get_departure')
 
+    created_date = serializers.DateField()
+
     def get_customer(self, obj):
         return {
             'full_name': obj.customer.first_name + ' ' + obj.customer.last_name,
