@@ -26,6 +26,7 @@ class QuoteListApiView(ListAPIView):
 
         pick_up_address_query_param = self.request.query_params.get('pick_up_address')
         drop_off_address_query_param = self.request.query_params.get('drop_off_address')
+        pick_up_date_query_param = self.request.query_params.get('pick_up_date')
 
         is_lead_query_param = self.request.query_params.get('is_lead')
 
@@ -54,6 +55,9 @@ class QuoteListApiView(ListAPIView):
         if is_lead_query_param:
             status = True if is_lead_query_param == 'true' else False
             queryset = queryset.filter(is_lead=status)
+
+        if pick_up_date_query_param:
+            queryset = queryset.filter(pick_up_date=pick_up_date_query_param)
 
         return queryset
 
