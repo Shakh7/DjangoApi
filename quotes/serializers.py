@@ -55,18 +55,18 @@ class QuoteSerializer(serializers.Serializer):
 
     def get_destination(self, obj):
         return {
-            'zip_code': obj.pick_up_address.zip_code,
-            'city_name': obj.pick_up_address.city_name,
-            'state_name': obj.pick_up_address.state_name,
-            'state_code': obj.pick_up_address.state_code,
-        }
-
-    def get_departure(self, obj):
-        return {
             'zip_code': obj.drop_off_address.zip_code,
             'city_name': obj.drop_off_address.city_name,
             'state_name': obj.drop_off_address.state_name,
             'state_code': obj.drop_off_address.state_code,
+        }
+
+    def get_departure(self, obj):
+        return {
+            'zip_code': obj.pick_up_address.zip_code,
+            'city_name': obj.pick_up_address.city_name,
+            'state_name': obj.pick_up_address.state_name,
+            'state_code': obj.pick_up_address.state_code,
         }
 
     def get_client_names(self, obj):
