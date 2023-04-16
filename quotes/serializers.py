@@ -38,8 +38,13 @@ class QuoteSerializer(serializers.Serializer):
     drop_off_address = serializers.CharField(source='drop_off_address.get_full_name')
     pick_up_date = serializers.DateField()
     is_operable = serializers.BooleanField()
-    customer_name = serializers.CharField(source='customer.get_full_name')
+    customer = serializers.SerializerMethodField(method_name='get_customer')
     client_names = serializers.SerializerMethodField(method_name='get_client_names')
+
+    def get_customer(self, obj):
+        return {
+            'full_name': obj.customer.first_name + ' ' + obj.customer.last_name,
+        }
 
     def get_client_names(self, obj):
         clients = obj.clients.all()
