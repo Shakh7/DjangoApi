@@ -12,56 +12,56 @@ from .models import Quote as Quote
 from .serializers import QuoteSerializer as QuoteSerializer
 from datetime import datetime
 
+
 class QuoteListApiView(ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = QuoteSerializer
 
     def get_queryset(self):
-        queryset = Quote.objects.select_related('car_make', 'customer').prefetch_related('clients').order_by(
-            '-created_at')
+        queryset = Quote.objects \
+            .select_related('car_make', 'customer') \
+            .prefetch_related('clients') \
+            .order_by('-created_at')
 
-        # Get the customer and car query parameters from the request
-        customer_query_param = self.request.query_params.get('customer')
-        car_query_param = self.request.query_params.get('car')
+        query = self.request.query_params
+        customer = query.get('customer')
+        car_query_param = query.get('car')
+        pick_up_address = query.get('pick_up_address')
+        drop_off_address = query.get('drop_off_address')
+        pick_up_date = query.get('pick_up_date')
+        created_at = query.get('created_at')
+        is_lead = query.get('is_lead')
 
-        pick_up_address_query_param = self.request.query_params.get('pick_up_address')
-        drop_off_address_query_param = self.request.query_params.get('drop_off_address')
-        pick_up_date_query_param = self.request.query_params.get('pick_up_date')
-        created_at_query_param = self.request.query_params.get('created_at')
+        if customer:
+            queryset = queryset.filter(customer__first_name__icontains=customer)
 
-        is_lead_query_param = self.request.query_params.get('is_lead')
-
-        # Perform the search based on the query parameters
-        if customer_query_param:
-            queryset = queryset.filter(customer__first_name__icontains=customer_query_param)
-
-        if pick_up_address_query_param:
+        if pick_up_address:
             queryset = queryset.filter(
-                Q(pick_up_address__city_name__icontains=pick_up_address_query_param) |
-                Q(pick_up_address__state_code__icontains=pick_up_address_query_param) |
-                Q(pick_up_address__zip_code__icontains=pick_up_address_query_param)
+                Q(pick_up_address__city_name__icontains=pick_up_address) |
+                Q(pick_up_address__state_code__icontains=pick_up_address) |
+                Q(pick_up_address__zip_code__icontains=pick_up_address)
             )
 
-        if drop_off_address_query_param:
+        if drop_off_address:
             queryset = queryset.filter(
-                Q(drop_off_address__city_name__icontains=drop_off_address_query_param) |
-                Q(drop_off_address__state_code__icontains=drop_off_address_query_param) |
-                Q(drop_off_address__zip_code__icontains=drop_off_address_query_param)
+                Q(drop_off_address__city_name__icontains=drop_off_address) |
+                Q(drop_off_address__state_code__icontains=drop_off_address) |
+                Q(drop_off_address__zip_code__icontains=drop_off_address)
             )
 
         if car_query_param:
             queryset = queryset.filter(
                 Q(car_make__name__icontains=car_query_param) | Q(car_model__name__icontains=car_query_param))
 
-        if is_lead_query_param:
-            status = True if is_lead_query_param == 'true' else False
-            queryset = queryset.filter(is_lead=status)
+        if is_lead:
+            quote_status = True if is_lead == 'true' else False
+            queryset = queryset.filter(is_lead=quote_status)
 
-        if pick_up_date_query_param:
-            queryset = queryset.filter(pick_up_date=pick_up_date_query_param)
+        if pick_up_date:
+            queryset = queryset.filter(pick_up_date=pick_up_date)
 
-        if created_at_query_param:
-            date = datetime.strptime(created_at_query_param, '%Y-%m-%d').date()
+        if created_at:
+            date = datetime.strptime(created_at, '%Y-%m-%d').date()
             queryset = queryset.filter(created_at=date)
 
         return queryset
