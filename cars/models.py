@@ -5,7 +5,7 @@ from django.db import models
 
 class Car(models.Model):
     name = models.CharField(max_length=120, unique=True)
-    models = models.ManyToManyField('CarModel', blank=True, null=True, related_name='cars')
+    models = models.ManyToManyField('CarModel', blank=True, related_name='cars')
 
     def __str__(self):
         return self.name

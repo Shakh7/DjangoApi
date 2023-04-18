@@ -29,4 +29,4 @@ class City(models.Model):
         ).filter(full_name__icontains=query)
 
     def __str__(self):
-        return self.city_name + self.state_name
+        return self.city_name + ', ' + self.state_code

@@ -41,15 +41,21 @@ class QuoteSerializer(serializers.Serializer):
 
     pick_up_date = serializers.DateField()
     is_operable = serializers.BooleanField()
-    is_lead = serializers.BooleanField()
 
     customer = serializers.SerializerMethodField(method_name='get_customer')
     client_names = serializers.SerializerMethodField(method_name='get_client_names')
 
     destination = serializers.SerializerMethodField(method_name='get_destination')
     departure = serializers.SerializerMethodField(method_name='get_departure')
+    # count = serializers.SerializerMethodField(method_name='get_count')
 
     created_at = serializers.DateTimeField()
+
+    # def get_count(self, obj):
+    #     count = 0
+    #     for quote in obj.shared_quotes.all():
+    #         count += quote.clients.all().count()
+    #     return count
 
     def get_customer(self, obj):
         return {
