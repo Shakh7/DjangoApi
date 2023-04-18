@@ -11,20 +11,7 @@ import json
 class CarListView(generics.ListAPIView):
     serializer_class = CarSerializer
     permission_classes = [IsAdmin, permissions.IsAuthenticated]
-
-    def get_queryset(self):
-        with open('core/cars.json', 'r') as file:
-            data = json.load(file)
-            for car_dict in data:
-                car_name = car_dict['name']
-                car, created = Car.objects.get_or_create(name=car_name)
-                for model_dict in car_dict['models']:
-                    model_name = model_dict['name']
-                    model_series = model_dict['series']
-                    car_model, created = CarModel.objects.get_or_create(name=model_name, series=model_series)
-                    car.models.add(car_model)
-
-        return Car.objects.all()
+    queryset = Car.objects.all()
 
 
 class CarSearchView(generics.ListAPIView):
