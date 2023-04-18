@@ -89,14 +89,25 @@ WSGI_APPLICATION = 'DjangoApi.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'leads',
+#         'USER': 'shakh',
+#         'PASSWORD': 'ninny2023!',
+#         'HOST': 'localhost',
+#         'PORT': '',
+#     }
+# }
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'leads',
-        'USER': 'shakh',
-        'PASSWORD': 'ninny2023!',
+        'NAME': 'test',
+        'USER': 'dbuser',
+        'PASSWORD': 'cgv7i9rd9d6dv3opos20',
         'HOST': 'localhost',
-        'PORT': '',
+        'PORT': '5432',
     }
 }
 
