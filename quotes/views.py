@@ -2,6 +2,7 @@
 from django.db.models import Q
 from rest_framework import permissions
 from rest_framework import status
+from rest_framework.authentication import BasicAuthentication
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView
 from rest_framework.response import Response
 from django.core.exceptions import ValidationError
@@ -16,6 +17,7 @@ from datetime import datetime
 class QuoteListApiView(ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = QuoteSerializer
+    authentication_classes = [BasicAuthentication]
 
     def get_queryset(self):
         queryset = Quote.objects \

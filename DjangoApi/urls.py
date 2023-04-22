@@ -28,6 +28,15 @@ from .views import CustomTokenVerifyView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
+
+    # path('api/', include([
+    #     path('', include('users.urls')),
+    #     path('', include('quotes.urls')),
+    #     path('', include('city.urls')),
+    #     path('', include('cars.urls')),
+    # ])),
+
+    #
     path('api/', include('users.urls')),
     path('api/', include('quotes.urls')),
     path('api/', include('city.urls')),
@@ -37,6 +46,7 @@ urlpatterns = [
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/token/verify/', CustomTokenVerifyView.as_view(), name='token_verify'),
 ]
+
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
