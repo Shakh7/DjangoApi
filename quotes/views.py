@@ -17,7 +17,7 @@ from datetime import datetime
 class QuoteListApiView(ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = QuoteSerializer
-    authentication_classes = [BasicAuthentication]
+    # authentication_classes = [BasicAuthentication]
 
     def get_queryset(self):
         queryset = Quote.objects \

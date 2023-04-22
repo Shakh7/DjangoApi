@@ -11,7 +11,7 @@ class CityListView(generics.ListAPIView):
     serializer_class = CitySerializer
     permission_classes = [IsAdmin, permissions.IsAuthenticated]
 
-    authentication_classes = [BasicAuthentication]
+    # authentication_classes = [BasicAuthentication]
 
 
 class CitySearchView(generics.ListAPIView):
