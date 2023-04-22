@@ -23,7 +23,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-rp8%2$i)rvp&a1rpw1m^fk1ceo6)%z0lp-pz+gy)knnlj)b&1%'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
+
 
 ALLOWED_HOSTS = ['api.shipperauto.com', '68.183.109.5']
 
@@ -49,10 +50,10 @@ INSTALLED_APPS = [
     'leads.apps.LeadsConfig',
 ]
 
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    # 'DjangoApi.middlewares.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -60,7 +61,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
 ]
 
 REST_FRAMEWORK = {
@@ -82,7 +82,6 @@ SIMPLE_JWT = {
 CORS_ALLOWED_ORIGINS = [
     'https://api.shipperauto.com',
 ]
-# X_FRAME_OPTIONS = 'ALLOW-FROM https://api.shipperauto.com'
 
 ROOT_URLCONF = 'DjangoApi.urls'
 
