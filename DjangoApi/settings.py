@@ -8,7 +8,7 @@ SECRET_KEY = 'django-insecure-rp8%2$i)rvp&a1rpw1m^fk1ceo6)%z0lp-pz+gy)knnlj)b&1%
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'api.shipperauto.com'
+    'api.shipperauto.com', '127.0.0.1'
 ]
 
 CORS_ALLOWED_ORIGINS = [
@@ -25,8 +25,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
-    'rest_framework.authtoken',
 
+    'rest_framework_simplejwt',
     'users',
     'city.apps.CityConfig',
     'cars.apps.CarsConfig',
