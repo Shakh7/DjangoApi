@@ -43,7 +43,7 @@ class QuoteSerializer(serializers.Serializer):
     is_operable = serializers.BooleanField()
 
     customer = serializers.SerializerMethodField(method_name='get_customer')
-    client_names = serializers.SerializerMethodField(method_name='get_client_names')
+    # client_names = serializers.SerializerMethodField(method_name='get_client_names')
 
     destination = serializers.SerializerMethodField(method_name='get_destination')
     departure = serializers.SerializerMethodField(method_name='get_departure')
@@ -79,6 +79,6 @@ class QuoteSerializer(serializers.Serializer):
             'state_code': obj.pick_up_address.state_code,
         }
 
-    def get_client_names(self, obj):
-        clients = obj.clients.all()
-        return [{'full_name': client.full_name, 'email': client.email} for client in clients]
+    # def get_client_names(self, obj):
+    #     clients = obj.clients.all()
+    #     return [{'full_name': client.full_name, 'email': client.email} for client in clients]
