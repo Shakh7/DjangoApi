@@ -25,7 +25,6 @@ SECRET_KEY = 'django-insecure-rp8%2$i)rvp&a1rpw1m^fk1ceo6)%z0lp-pz+gy)knnlj)b&1%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-
 ALLOWED_HOSTS = ['api.shipperauto.com', '68.183.109.5', 'dashboard.shipperauto.com']
 
 # Application definition
@@ -49,7 +48,6 @@ INSTALLED_APPS = [
     'quotes.apps.QuotesConfig',
     'leads.apps.LeadsConfig',
 ]
-
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -82,6 +80,7 @@ SIMPLE_JWT = {
 
 CORS_ALLOWED_ORIGINS = [
     'https://api.shipperauto.com',
+    'dashboard.shipperauto.com'
 ]
 
 ROOT_URLCONF = 'DjangoApi.urls'
