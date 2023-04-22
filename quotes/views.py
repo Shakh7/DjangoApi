@@ -22,7 +22,6 @@ class QuoteListApiView(JWTAuthAPIListView):
     def get_queryset(self):
         queryset = Quote.objects \
             .select_related('car_make', 'customer') \
-            .prefetch_related('clients') \
             .order_by('-created_at')
 
         query = self.request.query_params
