@@ -1,0 +1,13 @@
+from django.http import HttpResponseForbidden
+
+
+class DomainRestrictionMiddleware:
+    ALLOWED_DOMAINS = ['shipperauto.com']
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        if request.get_host() not in self.ALLOWED_DOMAINS:
+            return HttpResponseForbidden('Access denied')
+        return self.get_response(request)

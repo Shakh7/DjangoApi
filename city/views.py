@@ -21,9 +21,11 @@ class CitySearchView(generics.ListAPIView):
     def get_queryset(self):
         query = self.kwargs['search']
 
-        with open('assets/us_states.json') as f:
-            states = json.load(f)
-            print(states)
+        print(self.request.get_host())
+
+        # with open('assets/us_states.json') as f:
+        #     states = json.load(f)
+        #     print(states)
 
         if query:
             queryset = City.search(query)
