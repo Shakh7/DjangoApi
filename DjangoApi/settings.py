@@ -12,7 +12,7 @@ ALLOWED_HOSTS = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    'https://dashboard.shipperauto.com',
+    'https://dashboard.shipperauto.com', 'http://192.168.242.14:3000'
 ]
 
 INSTALLED_APPS = [
