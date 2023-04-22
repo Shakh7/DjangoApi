@@ -1,27 +1,19 @@
-import json
-
-from rest_framework import generics, permissions
 from django.db.models import Q
-from rest_framework_simplejwt.authentication import JWTAuthentication
-
 from helpers.auth import IsAdmin
 from .models import Car, CarModel
 from .serializers import CarSerializer
-import json
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
-from rest_framework.permissions import IsAuthenticated
+from helpers.auth import JWTAuthAPIListView
 
 
-class CarListView(generics.ListAPIView):
+class CarListView(JWTAuthAPIListView):
     serializer_class = CarSerializer
-    permission_classes = [IsAdmin, permissions.IsAuthenticated]
+    permission_classes = [IsAdmin]
     queryset = Car.objects.all()
-    authentication_classes = [SessionAuthentication, BasicAuthentication, JWTAuthentication]
 
 
-class CarSearchView(generics.ListAPIView):
+class CarSearchView(JWTAuthAPIListView):
     serializer_class = CarSerializer
-    permission_classes = [IsAdmin, permissions.IsAuthenticated]
+    permission_classes = [IsAdmin]
 
     def get_queryset(self):
         query = self.kwargs['search']

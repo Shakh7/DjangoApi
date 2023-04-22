@@ -12,12 +12,12 @@ from customers.models import Customer
 from .models import Quote as Quote
 from .serializers import QuoteSerializer as QuoteSerializer
 from datetime import datetime
+from helpers.auth import JWTAuthAPIListView
 
 
-class QuoteListApiView(ListAPIView):
+class QuoteListApiView(JWTAuthAPIListView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = QuoteSerializer
-    # authentication_classes = [BasicAuthentication]
 
     def get_queryset(self):
         queryset = Quote.objects \
