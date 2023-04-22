@@ -52,7 +52,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'DjangoApi.middlewares.XFrameOptionsMiddleware',
+    # 'DjangoApi.middlewares.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -82,7 +82,7 @@ SIMPLE_JWT = {
 CORS_ALLOWED_ORIGINS = [
     'https://api.shipperauto.com',
 ]
-X_FRAME_OPTIONS = 'ALLOW-FROM https://api.shipperauto.com'
+# X_FRAME_OPTIONS = 'ALLOW-FROM https://api.shipperauto.com'
 
 ROOT_URLCONF = 'DjangoApi.urls'
 
