@@ -45,7 +45,7 @@ class CitySearchView(JWTAuthAPIListView):
                 #         "lat": 34.05912
                 #     }
                 # },
-                city = City(
+                city, _ = City.objects.get_or_create(
                     zip_code=state['zip_code'],
                     city_name=state['usps_city'],
                     state_code=state['stusps_code'],
