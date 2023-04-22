@@ -2,7 +2,7 @@ from django.http import HttpResponseForbidden
 
 
 class DomainRestrictionMiddleware:
-    ALLOWED_DOMAINS = ['shipperauto.com']
+    ALLOWED_DOMAINS = ['shipperauto.com', 'api.shipperauto.com']
 
     def __init__(self, get_response):
         self.get_response = get_response
