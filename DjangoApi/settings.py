@@ -1,3 +1,4 @@
+import datetime
 import os
 from pathlib import Path
 from datetime import timedelta
@@ -26,7 +27,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
 
-    'rest_framework_simplejwt',
     'users',
     'city.apps.CityConfig',
     'cars.apps.CarsConfig',
@@ -49,18 +49,10 @@ MIDDLEWARE = [
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
     'PAGE_SIZE': 50,
-}
-
-SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=120),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
-
-    "ALGORITHM": "HS256",
-    "SIGNING_KEY": SECRET_KEY,
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
 }
 
 ROOT_URLCONF = 'DjangoApi.urls'
@@ -87,27 +79,27 @@ WSGI_APPLICATION = 'DjangoApi.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'leads',
-#         'USER': 'shakh',
-#         'PASSWORD': 'ninny2023!',
-#         'HOST': 'localhost',
-#         'PORT': '',
-#     }
-# }
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'test',
-        'USER': 'dbuser',
-        'PASSWORD': 'cgv7i9rd9d6dv3opos20',
+        'NAME': 'leads',
+        'USER': 'shakh',
+        'PASSWORD': 'ninny2023!',
         'HOST': 'localhost',
-        'PORT': '5432',
+        'PORT': '',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'test',
+#         'USER': 'dbuser',
+#         'PASSWORD': 'cgv7i9rd9d6dv3opos20',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }
 
 AUTH_USER_MODEL = "users.CustomUser"
 
