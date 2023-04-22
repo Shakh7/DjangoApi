@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-rp8%2$i)rvp&a1rpw1m^fk1ceo6)%z0lp-pz+gy)knnlj)b&1%'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 
 ALLOWED_HOSTS = ['api.shipperauto.com', '68.183.109.5']
@@ -50,14 +50,7 @@ INSTALLED_APPS = [
     'leads.apps.LeadsConfig',
 ]
 
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'test',
-#         'USER': 'dbuser',
-#         'PASSWORD': 'cgv7i9rd9d6dv3opos20',
-#         'HOST': 'localhost',
-#         'PORT': '5432',
-#     }
-# }
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -114,27 +107,27 @@ WSGI_APPLICATION = 'DjangoApi.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'leads',
-        'USER': 'shakh',
-        'PASSWORD': 'ninny2023!',
-        'HOST': 'localhost',
-        'PORT': '',
-    }
-}
-
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'test',
-#         'USER': 'dbuser',
-#         'PASSWORD': 'cgv7i9rd9d6dv3opos20',
+#         'NAME': 'leads',
+#         'USER': 'shakh',
+#         'PASSWORD': 'ninny2023!',
 #         'HOST': 'localhost',
-#         'PORT': '5432',
+#         'PORT': '',
 #     }
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'test',
+        'USER': 'dbuser',
+        'PASSWORD': 'cgv7i9rd9d6dv3opos20',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
+}
 
 AUTH_USER_MODEL = "users.CustomUser"
 
