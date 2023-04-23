@@ -16,6 +16,8 @@ CORS_ALLOWED_ORIGINS = [
     'https://dashboard.shipperauto.com', 'http://192.168.242.14:3000'
 ]
 
+CORS_ALLOW_CREDENTIALS = True
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
