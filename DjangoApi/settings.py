@@ -11,10 +11,12 @@ DEBUG = True
 ALLOWED_HOSTS = [
     'api.shipperauto.com', '127.0.0.1'
 ]
+#
+# CORS_ALLOWED_ORIGINS = [
+#     'https://dashboard.shipperauto.com', 'http://192.168.242.14:3000'
+# ]
 
-CORS_ALLOWED_ORIGINS = [
-    'https://dashboard.shipperauto.com', 'http://192.168.242.14:3000'
-]
+CORS_ORIGIN_ALLOW_ALL = True
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -67,8 +69,7 @@ ROOT_URLCONF = 'DjangoApi.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
-        ,
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -86,27 +87,27 @@ WSGI_APPLICATION = 'DjangoApi.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'leads',
-#         'USER': 'shakh',
-#         'PASSWORD': 'ninny2023!',
-#         'HOST': 'localhost',
-#         'PORT': '',
-#     }
-# }
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'test',
-        'USER': 'dbuser',
-        'PASSWORD': 'cgv7i9rd9d6dv3opos20',
+        'NAME': 'leads',
+        'USER': 'shakh',
+        'PASSWORD': 'ninny2023!',
         'HOST': 'localhost',
-        'PORT': '5432',
+        'PORT': '',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'test',
+#         'USER': 'dbuser',
+#         'PASSWORD': 'cgv7i9rd9d6dv3opos20',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }
 
 AUTH_USER_MODEL = "users.CustomUser"
 

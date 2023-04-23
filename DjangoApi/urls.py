@@ -21,7 +21,7 @@ from django.conf.urls.static import static
 from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
-from .views import TokenObtainPairView, TokenRefreshView, UserInfoView
+from .views import RegisterView, LoginView, UserView, LogoutView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -40,9 +40,10 @@ urlpatterns = [
     path('api/', include('city.urls')),
     path('api/', include('cars.urls')),
 
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('api/token/verify/', UserInfoView.as_view(), name='token_verify'),
+    path('register', RegisterView.as_view()),
+    path('login', LoginView.as_view()),
+    path('user', UserView.as_view()),
+    path('logout', LogoutView.as_view()),
 ]
 
 if settings.DEBUG:
