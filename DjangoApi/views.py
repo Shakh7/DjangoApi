@@ -1,8 +1,9 @@
 from rest_framework_simplejwt.views import TokenVerifyView, TokenObtainPairView
-from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.exceptions import InvalidToken
 from users.models import CustomUser
 
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.views import APIView
 from django.http import JsonResponse
 
 
@@ -14,6 +15,14 @@ class CustomTokenObtainPairView(TokenObtainPairView):
                                 response.data['access'], httponly=True,
                                 secure=True, samesite='None')
         return response
+
+
+class VerifyTokenView(APIView):
+    authentication_classes = [JWTAuthentication]
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        return JsonResponse({'username': user.full_name, 'email': user.email})
 
 
 class CustomTokenVerifyView(TokenVerifyView):
