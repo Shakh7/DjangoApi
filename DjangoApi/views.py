@@ -1,10 +1,4 @@
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework_simplejwt.views import TokenVerifyView, TokenObtainPairView
-from rest_framework_simplejwt.exceptions import InvalidToken
-from users.models import CustomUser
-
-from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.views import APIView
 from django.http import JsonResponse
 
 
@@ -18,34 +12,18 @@ class CustomTokenObtainPairView(TokenObtainPairView):
         return response
 
 
-class VerifyTokenView(APIView):
-
-    def get(self, request, *args, **kwargs):
-        user = request.user
-        return JsonResponse({'username': user.full_name, 'email': user.email})
-
-
 class CustomTokenVerifyView(TokenVerifyView):
-    authentication_classes = (JWTAuthentication,)
+    def get(self, request, *args, **kwargs):
+        # retrieve the access token from cookies
+        access_token = request.COOKIES.get('access_token')
+        if not access_token:
+            return JsonResponse({'error': 'Access token not found'}, status=400)
 
-    def post(self, request, *args, **kwargs):
+        # pass the access token to TokenVerifyView to verify the token
+        request.META['HTTP_AUTHORIZATION'] = f'Bearer {access_token}'
         response = super().post(request, *args, **kwargs)
-        token = request.data.get('token', None)
+        if response.status_code == 200:
+            # return user info from validated token
+            return JsonResponse(response.data['user'], status=200)
 
-        if token is not None:
-            try:
-                decoded_token = JWTAuthentication.get_validated_token(self, token)
-                user_id = decoded_token['user_id']
-                user = CustomUser.objects.get(id=user_id)
-                user_info = {
-                    'id': user.id,
-                    'full_name': user.full_name,
-                    'user_type': user.user_type,
-                    'email': user.email
-                }
-                response.data['user'] = user_info
-                response.data['access'] = token
-            except InvalidToken:
-                pass
-
-        return response
+        return JsonResponse({'error': 'Invalid token'}, status=401)
