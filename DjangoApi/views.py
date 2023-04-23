@@ -19,7 +19,6 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 
 
 class VerifyTokenView(APIView):
-    authentication_classes = [SessionAuthentication, JWTAuthentication]
 
     def get(self, request, *args, **kwargs):
         user = request.user
