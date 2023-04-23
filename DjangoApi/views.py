@@ -13,7 +13,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 
 
 class CustomTokenVerifyView(TokenVerifyView):
-    def get(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         # retrieve the access token from cookies
         access_token = request.COOKIES.get('access_token')
         if not access_token:
@@ -27,3 +27,4 @@ class CustomTokenVerifyView(TokenVerifyView):
             return JsonResponse(response.data['user'], status=200)
 
         return JsonResponse({'error': 'Invalid token'}, status=401)
+
