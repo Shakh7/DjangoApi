@@ -12,7 +12,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
         if response.status_code == 200:
             response.set_cookie('access_token',
                                 response.data['access'], httponly=True,
-                                secure=True, samesite='none')
+                                secure=True, samesite='None')
         return response
 
 
