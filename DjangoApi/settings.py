@@ -18,7 +18,6 @@ CORS_ALLOWED_ORIGINS = [
 
 CORS_ALLOW_CREDENTIALS = True
 
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -60,6 +59,7 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=3),
+    'USER_ID_CLAIM': 'id'
 }
 
 ROOT_URLCONF = 'DjangoApi.urls'
@@ -86,27 +86,27 @@ WSGI_APPLICATION = 'DjangoApi.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'leads',
-#         'USER': 'shakh',
-#         'PASSWORD': 'ninny2023!',
-#         'HOST': 'localhost',
-#         'PORT': '',
-#     }
-# }
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'test',
-        'USER': 'dbuser',
-        'PASSWORD': 'cgv7i9rd9d6dv3opos20',
+        'NAME': 'leads',
+        'USER': 'shakh',
+        'PASSWORD': 'ninny2023!',
         'HOST': 'localhost',
-        'PORT': '5432',
+        'PORT': '',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'test',
+#         'USER': 'dbuser',
+#         'PASSWORD': 'cgv7i9rd9d6dv3opos20',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }
 
 AUTH_USER_MODEL = "users.CustomUser"
 
