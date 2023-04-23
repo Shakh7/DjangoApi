@@ -1,3 +1,4 @@
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework_simplejwt.views import TokenVerifyView, TokenObtainPairView
 from rest_framework_simplejwt.exceptions import InvalidToken
 from users.models import CustomUser
@@ -18,7 +19,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 
 
 class VerifyTokenView(APIView):
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [SessionAuthentication, BasicAuthentication, JWTAuthentication]
 
     def get(self, request, *args, **kwargs):
         user = request.user
