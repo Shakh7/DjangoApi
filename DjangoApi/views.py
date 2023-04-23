@@ -1,7 +1,17 @@
-from rest_framework_simplejwt.views import TokenVerifyView
+from rest_framework_simplejwt.views import TokenVerifyView, TokenObtainPairView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.exceptions import InvalidToken
 from users.models import CustomUser
+
+from django.http import JsonResponse
+
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+        if response.status_code == 200:
+            response.set_cookie('access_token', response.data['access'], httponly=True, secure=True)
+        return response
 
 
 class CustomTokenVerifyView(TokenVerifyView):
