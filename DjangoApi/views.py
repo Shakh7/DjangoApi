@@ -10,7 +10,9 @@ class CustomTokenObtainPairView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
         response = super().post(request, *args, **kwargs)
         if response.status_code == 200:
-            response.set_cookie('access_token', response.data['access'], httponly=True, secure=True)
+            response.set_cookie('access_token',
+                                response.data['access'], httponly=True,
+                                secure=True, samesite='none')
         return response
 
 
