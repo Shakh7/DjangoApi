@@ -40,10 +40,10 @@ urlpatterns = [
     path('api/', include('city.urls')),
     path('api/', include('cars.urls')),
 
-    path('register', RegisterView.as_view()),
-    path('login', LoginView.as_view()),
-    path('user', UserView.as_view()),
-    path('logout', LogoutView.as_view()),
+    path('api/register', RegisterView.as_view()),
+    path('api/login', LoginView.as_view()),
+    path('api/user', UserView.as_view()),
+    path('api/logout', LogoutView.as_view()),
 ]
 
 if settings.DEBUG:
