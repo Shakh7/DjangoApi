@@ -12,11 +12,10 @@ ALLOWED_HOSTS = [
     'api.shipperauto.com', '127.0.0.1'
 ]
 #
-# CORS_ALLOWED_ORIGINS = [
-#     'https://dashboard.shipperauto.com', 'http://192.168.242.14:3000'
-# ]
+CORS_ALLOWED_ORIGINS = [
+    'https://dashboard.shipperauto.com', 'http://192.168.242.14:3000'
+]
 
-CORS_ORIGIN_ALLOW_ALL = True
 
 INSTALLED_APPS = [
     'django.contrib.admin',
