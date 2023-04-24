@@ -1,19 +1,19 @@
 from django.db.models import Q
-from helpers.auth import IsAdmin
+from helpers.auth import IsAuthenticated
 from .models import Car, CarModel
 from .serializers import CarSerializer
-from helpers.auth import JWTAuthAPIListView
+from helpers.auth import SessionAuthAPIListView
 
 
-class CarListView(JWTAuthAPIListView):
+class CarListView(SessionAuthAPIListView):
     serializer_class = CarSerializer
-    permission_classes = [IsAdmin]
+    permission_classes = [IsAuthenticated]
     queryset = Car.objects.all()
 
 
-class CarSearchView(JWTAuthAPIListView):
+class CarSearchView(SessionAuthAPIListView):
     serializer_class = CarSerializer
-    permission_classes = [IsAdmin]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         query = self.kwargs['search']

@@ -1,74 +1,43 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.exceptions import AuthenticationFailed
-from users.serializers import UserSerializer
-from users.models import CustomUser as User
-import jwt, datetime
+from datetime import datetime
+
+from rest_framework_simplejwt.views import TokenVerifyView
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework_simplejwt.exceptions import InvalidToken
+from users.models import CustomUser
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 
-# Create your views here.
-class RegisterView(APIView):
-    def post(self, request):
-        serializer = UserSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
-
-
-class LoginView(APIView):
-    def post(self, request):
-        email = request.data['email']
-        password = request.data['password']
-
-        user = User.objects.filter(email=email).first()
-
-        if user is None:
-            raise AuthenticationFailed('User not found!')
-
-        if not user.check_password(password):
-            raise AuthenticationFailed('Incorrect password!')
-
-        payload = {
-            'id': user.id,
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
-            'iat': datetime.datetime.utcnow()
-        }
-
-        token = jwt.encode(payload, 'secret', algorithm='HS256').decode('utf-8')
-
-        response = Response()
-
-        response.set_cookie('token', token, httponly=True, samesite='None')
-        response.data = {
-            'jwt': token
-        }
+class CustomTokenObtainPairView(TokenObtainPairView):
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+        del response.data['refresh']
         return response
 
 
+class CustomTokenVerifyView(TokenVerifyView):
+    authentication_classes = (JWTAuthentication,)
 
-class UserView(APIView):
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+        token = request.data.get('token', None)
 
-    def get(self, request):
-        token = request.COOKIES.get('jwt')
+        if token is not None:
+            try:
+                decoded_token = JWTAuthentication.get_validated_token(self, token)
+                user_id = decoded_token['user_id']
+                user = CustomUser.objects.get(id=user_id)
+                user_info = {
+                    'id': user.id,
+                    'full_name': user.full_name,
+                    'user_type': user.user_type,
+                    'email': user.email
+                }
+                exp_datetime = datetime.fromtimestamp(decoded_token['exp'])
+                exp_string = exp_datetime.strftime('%B %d at %H:%M:%S')
+                response.data['user'] = user_info
+                response.data['access'] = token
+                response.data['exp'] = exp_string
+            except InvalidToken:
+                pass
 
-        if not token:
-            raise AuthenticationFailed('Unauthenticated!')
-
-        try:
-            payload = jwt.decode(token, 'secret', algorithm=['HS256'])
-        except jwt.ExpiredSignatureError:
-            raise AuthenticationFailed('Unauthenticated!')
-
-        user = User.objects.filter(id=payload['id']).first()
-        serializer = UserSerializer(user)
-        return Response(serializer.data)
-
-
-class LogoutView(APIView):
-    def post(self, request):
-        response = Response()
-        response.delete_cookie('jwt')
-        response.data = {
-            'message': 'success'
-        }
         return response

@@ -1,21 +1,21 @@
 from rest_framework import generics, permissions
-from helpers.auth import IsAdmin
+from helpers.auth import IsAuthenticated
 from .models import City
 from .serializers import CitySerializer
 import json
 from rest_framework.authentication import BasicAuthentication
-from helpers.auth import JWTAuthAPIListView
+from helpers.auth import SessionAuthAPIListView
 
 
-class CityListView(JWTAuthAPIListView):
+class CityListView(SessionAuthAPIListView):
     queryset = City.objects.all()
     serializer_class = CitySerializer
-    permission_classes = [IsAdmin]
+    permission_classes = [IsAuthenticated]
 
 
-class CitySearchView(JWTAuthAPIListView):
+class CitySearchView(SessionAuthAPIListView):
     serializer_class = CitySerializer
-    permission_classes = [IsAdmin]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         query = self.kwargs['search']

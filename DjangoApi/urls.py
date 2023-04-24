@@ -18,32 +18,19 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
-from rest_framework_simplejwt.views import (
-    TokenRefreshView,
-)
-from .views import RegisterView, LoginView, UserView, LogoutView
+from .views import CustomTokenVerifyView, CustomTokenObtainPairView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
 
-    # path('api/', include([
-    #     path('', include('users.urls')),
-    #     path('', include('quotes.urls')),
-    #     path('', include('city.urls')),
-    #     path('', include('cars.urls')),
-    # ])),
-
-    #
     path('api/', include('users.urls')),
     path('api/', include('quotes.urls')),
     path('api/', include('city.urls')),
     path('api/', include('cars.urls')),
 
-    path('api/register', RegisterView.as_view()),
-    path('api/login', LoginView.as_view()),
-    path('api/user', UserView.as_view()),
-    path('api/logout', LogoutView.as_view()),
+    path('api/token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/verify/', CustomTokenVerifyView.as_view(), name='token_verify'),
 ]
 
 if settings.DEBUG:

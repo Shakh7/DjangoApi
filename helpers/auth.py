@@ -1,13 +1,16 @@
-from rest_framework.permissions import BasePermission
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
-from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework import generics
+from rest_framework.permissions import BasePermission
+
+
+class IsAuthenticated(BasePermission):
+    def has_permission(self, request, view):
+        return request.user.is_authenticated
 
 
 class IsAdmin(BasePermission):
     def has_permission(self, request, view):
-        return request.user.is_superuser
+        return request.user.is_authenticated and request.user.user_type == 'admin'
 
 
-class JWTAuthAPIListView(generics.ListAPIView):
-    authentication_classes = [SessionAuthentication, BasicAuthentication, JWTAuthentication]
+class SessionAuthAPIListView(generics.ListAPIView):
+    pass

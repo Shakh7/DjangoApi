@@ -12,11 +12,11 @@ from customers.models import Customer
 from .models import Quote as Quote
 from .serializers import QuoteSerializer as QuoteSerializer
 from datetime import datetime
-from helpers.auth import JWTAuthAPIListView
+from helpers.auth import SessionAuthAPIListView, IsAuthenticated, IsAdmin
 
 
-class QuoteListApiView(JWTAuthAPIListView):
-    permission_classes = [permissions.IsAuthenticated]
+class QuoteListApiView(SessionAuthAPIListView):
+    permission_classes = [IsAdmin]
     serializer_class = QuoteSerializer
 
     def get_queryset(self):
