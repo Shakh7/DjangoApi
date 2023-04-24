@@ -13,7 +13,7 @@ ALLOWED_HOSTS = [
 ]
 #
 CORS_ORIGIN_WHITELIST = [
-    'https://dashboard.shipperauto.com',
+    'https://dashboard.shipperauto.com', 'http://192.168.242.14:3000'
 ]
 
 CORS_ALLOW_CREDENTIALS = True
