@@ -16,6 +16,8 @@ CORS_ORIGIN_WHITELIST = [
     'https://dashboard.shipperauto.com',
 ]
 
+CORS_ALLOW_CREDENTIALS = True
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
