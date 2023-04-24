@@ -32,11 +32,9 @@ class CustomTokenVerifyView(TokenVerifyView):
                     'user_type': user.user_type,
                     'email': user.email
                 }
-                exp_datetime = datetime.fromtimestamp(decoded_token['exp'])
-                exp_string = exp_datetime.strftime('%B %d at %H:%M:%S')
                 response.data['user'] = user_info
                 response.data['access'] = token
-                response.data['exp'] = exp_string
+                response.data['exp'] = decoded_token['exp']
             except InvalidToken:
                 pass
 
