@@ -7,11 +7,11 @@ from city.models import City
 from django.core.exceptions import ValidationError
 from customers.models import Customer
 from users.models import CustomUser
-from django.utils.crypto import get_random_string
+import uuid
 
 
 class Quote(models.Model):
-    unique_code = models.CharField(max_length=10, blank=True, null=True, editable=False)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='quotes')
     pick_up_date = models.DateField(default=timezone.now)
@@ -20,11 +20,16 @@ class Quote(models.Model):
     car_model = models.ForeignKey(CarModel, on_delete=models.CASCADE)
     car_year = models.IntegerField(validators=[MinValueValidator(1900), MaxValueValidator(2100)])
 
-    pick_up_address = models.ForeignKey(City, on_delete=models.CASCADE, related_name='pick_up_quotes')
-    drop_off_address = models.ForeignKey(City, on_delete=models.CASCADE, related_name='drop_off_quotes')
+    origin = models.ForeignKey(City, on_delete=models.CASCADE, related_name='origin')
+    destination = models.ForeignKey(City, on_delete=models.CASCADE, related_name='destination')
 
     is_operable = models.BooleanField(default=True)
     notes = models.TextField(blank=True, null=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['id'], name='unique_quote_id'),
+        ]
 
     def clean(self):
         if self.car_model not in self.car_make.models.all():
@@ -34,7 +39,6 @@ class Quote(models.Model):
         is_new_instance = not self.pk  # Check if this is a new instance or an update
 
         if is_new_instance:
-            self.unique_code = get_random_string(10)
             super().save(*args, **kwargs)
             text = f'New lead ✅: \n\n' \
                    f'Car Make: {self.car_make.name}\n' \
@@ -46,12 +50,10 @@ class Quote(models.Model):
                    f'Name: {self.customer.first_name} {self.customer.last_name}\n' \
                    f'Email: {self.customer.email} \n\n' \
                    f'Created At: {self.created_at}'
-            response = requests.get(
+            requests.get(
                 f'https://api.telegram.org/bot6170443565:AAGsnbPJfnLMWnTjHwth5O4hkosdQXb0O9E/sendMessage?chat_id=5000241789&text={text}&parse_mode=Markdown')
         else:
             super().save(*args, **kwargs)
 
     def __str__(self):
-        return self.car_make.name
-
-
+        return self.car_make.name + ', ' + self.car_model.name

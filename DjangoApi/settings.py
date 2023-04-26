@@ -13,7 +13,7 @@ ALLOWED_HOSTS = [
 ]
 #
 CORS_ORIGIN_WHITELIST = [
-    'https://dashboard.shipperauto.com', 'http://192.168.242.14:3000'
+    'https://dashboard.shipperauto.com', 'http://192.168.242.14:3000', 'http://10.0.2.26:3000'
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -27,7 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
 
     'users',
@@ -53,16 +53,14 @@ MIDDLEWARE = [
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 50,
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
-    ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication'
     )
 }
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
 
     "ALGORITHM": "HS256",
@@ -92,27 +90,27 @@ WSGI_APPLICATION = 'DjangoApi.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 #
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'leads',
-#         'USER': 'shakh',
-#         'PASSWORD': 'ninny2023!',
-#         'HOST': 'localhost',
-#         'PORT': '',
-#     }
-# }
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'test',
-        'USER': 'dbuser',
-        'PASSWORD': 'cgv7i9rd9d6dv3opos20',
+        'NAME': 'leads',
+        'USER': 'shakh',
+        'PASSWORD': 'ninny2023!',
         'HOST': 'localhost',
-        'PORT': '5432',
+        'PORT': '',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'test',
+#         'USER': 'dbuser',
+#         'PASSWORD': 'cgv7i9rd9d6dv3opos20',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }
 
 AUTH_USER_MODEL = "users.CustomUser"
 

@@ -13,6 +13,7 @@ from .models import Quote as Quote
 from .serializers import QuoteSerializer as QuoteSerializer
 from datetime import datetime
 from helpers.auth import SessionAuthAPIListView, IsAuthenticated, IsAdmin
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
 class QuoteListApiView(SessionAuthAPIListView):

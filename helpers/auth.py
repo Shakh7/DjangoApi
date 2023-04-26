@@ -1,5 +1,7 @@
 from rest_framework import generics
 from rest_framework.permissions import BasePermission
+from django.contrib.sessions.models import Session
+from users.models import CustomUser as User
 
 
 class IsAuthenticated(BasePermission):

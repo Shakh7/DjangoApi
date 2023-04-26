@@ -31,14 +31,10 @@ class CustomerSerializer(serializers.ModelSerializer):
 
 
 class QuoteSerializer(serializers.Serializer):
-    unique_code = serializers.CharField()
-    id = serializers.IntegerField()
+    id = serializers.CharField()
     car_make = serializers.CharField(source='car_make.name')
     car_model = serializers.CharField(source='car_model.name')
     car_year = serializers.IntegerField()
-
-    pick_up_address = serializers.CharField(source='pick_up_address.get_full_name')
-    drop_off_address = serializers.CharField(source='drop_off_address.get_full_name')
 
     pick_up_date = serializers.DateField()
     is_operable = serializers.BooleanField()
@@ -46,17 +42,24 @@ class QuoteSerializer(serializers.Serializer):
     customer = serializers.SerializerMethodField(method_name='get_customer')
     # client_names = serializers.SerializerMethodField(method_name='get_client_names')
 
+    origin = serializers.SerializerMethodField(method_name='get_departure')
     destination = serializers.SerializerMethodField(method_name='get_destination')
-    departure = serializers.SerializerMethodField(method_name='get_departure')
-    # count = serializers.SerializerMethodField(method_name='get_count')
+    quote_clients = serializers.SerializerMethodField(method_name='get_quote_clients')
 
     created_at = serializers.DateTimeField()
+    notes = serializers.CharField()
 
-    # def get_count(self, obj):
-    #     count = 0
-    #     for quote in obj.shared_quotes.all():
-    #         count += quote.clients.all().count()
-    #     return count
+    def get_quote_clients(self, obj):
+        clients = []
+        for lead in obj.leads.all():
+            clients.append({
+                'client': {
+                    'id': lead.client.id,
+                    'full_name': lead.client.full_name,
+                },
+                'price': lead.price
+            })
+        return clients
 
     def get_customer(self, obj):
         return {
@@ -66,18 +69,18 @@ class QuoteSerializer(serializers.Serializer):
 
     def get_destination(self, obj):
         return {
-            'zip_code': obj.drop_off_address.zip_code,
-            'city_name': obj.drop_off_address.city_name,
-            'state_name': obj.drop_off_address.state_name,
-            'state_code': obj.drop_off_address.state_code,
+            'zip_code': obj.destination.zip_code,
+            'city_name': obj.destination.city_name,
+            'state_name': obj.destination.state_name,
+            'state_code': obj.destination.state_code,
         }
 
     def get_departure(self, obj):
         return {
-            'zip_code': obj.pick_up_address.zip_code,
-            'city_name': obj.pick_up_address.city_name,
-            'state_name': obj.pick_up_address.state_name,
-            'state_code': obj.pick_up_address.state_code,
+            'zip_code': obj.origin.zip_code,
+            'city_name': obj.origin.city_name,
+            'state_name': obj.origin.state_name,
+            'state_code': obj.origin.state_code,
         }
 
     # def get_client_names(self, obj):
