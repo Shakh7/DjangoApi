@@ -9,3 +9,7 @@ urlpatterns = [
     path('quotes/<int:id>/', QuoteDetailsApiView.as_view()),
     path('quotes/create/', QuoteCreateView.as_view()),
 ]
+
+
+
+
