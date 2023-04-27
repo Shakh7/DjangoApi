@@ -9,7 +9,7 @@ from .models import Quote
 
 class QuoteAdmin(admin.ModelAdmin):
     model = Quote
-    list_display = ('id', 'customer', 'car_make', 'car_model', 'origin', 'destination', 'pick_up_date',
+    list_display = ('id', 'car_make', 'car_model', 'origin', 'destination', 'pick_up_date',
                     'is_operable', 'created_at')
 
 

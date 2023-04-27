@@ -3,9 +3,8 @@ from datetime import datetime
 from rest_framework_simplejwt.views import TokenVerifyView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.exceptions import InvalidToken
-from users.models import CustomUser
 from rest_framework_simplejwt.views import TokenObtainPairView
-
+from users.models import CustomUser
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):

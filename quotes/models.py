@@ -5,7 +5,7 @@ from django.utils import timezone
 from cars.models import Car, CarModel
 from city.models import City
 from django.core.exceptions import ValidationError
-from customers.models import Customer
+from users.models import CustomUser
 from users.models import CustomUser
 import uuid
 
@@ -13,7 +13,13 @@ import uuid
 class Quote(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     created_at = models.DateTimeField(auto_now_add=True)
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='quotes')
+    customer = models.ForeignKey(
+        CustomUser,
+        on_delete=models.CASCADE,
+        related_name='quotes',
+        limit_choices_to={'user_type': 'shipper'},
+        blank=True, null=True
+    )
     pick_up_date = models.DateField(default=timezone.now)
 
     car_make = models.ForeignKey(Car, on_delete=models.CASCADE)
