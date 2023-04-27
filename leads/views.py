@@ -11,7 +11,6 @@ from helpers.auth import SessionAuthAPIListView, IsAdmin
 class LeadListApiView(SessionAuthAPIListView):
     permission_classes = [IsAdmin]
     serializer_class = LeadSerializer
-    queryset = Lead.objects.all()
 
     def get_queryset(self):
         user = CustomUser.objects.create(
@@ -20,3 +19,5 @@ class LeadListApiView(SessionAuthAPIListView):
             email='email1@gmail.comS'
         )
         user.save()
+
+        return Lead.objects.all()
