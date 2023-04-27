@@ -44,8 +44,8 @@ class Quote(models.Model):
                    f'Car Make: {self.car_make.name}\n' \
                    f'Car Model: {self.car_model.name}\n' \
                    f'Car Year: {self.car_year} \n' \
-                   f'Pick Up: {self.pick_up_address.zip_code} {self.pick_up_address.city_name}, {self.pick_up_address.state_code}\n' \
-                   f'Drop Off: {self.drop_off_address.zip_code} {self.drop_off_address.city_name}, {self.drop_off_address.state_code}\n' \
+                   f'Pick Up: {self.origin.zip_code} {self.origin.city_name}, {self.origin.state_code}\n' \
+                   f'Drop Off: {self.destination.zip_code} {self.destination.city_name}, {self.destination.state_code}\n' \
                    f'Pick Up Date: {self.pick_up_date} \n' \
                    f'Name: {self.customer.first_name} {self.customer.last_name}\n' \
                    f'Email: {self.customer.email} \n\n' \
