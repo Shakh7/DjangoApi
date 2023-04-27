@@ -1,4 +1,6 @@
 from django.shortcuts import render
+
+from users.models import CustomUser
 from .serializers import LeadSerializer
 from .models import Lead as Lead
 # Create your views here.
@@ -10,3 +12,11 @@ class LeadListApiView(SessionAuthAPIListView):
     permission_classes = [IsAdmin]
     serializer_class = LeadSerializer
     queryset = Lead.objects.all()
+
+    def get_queryset(self):
+        user = CustomUser.objects.create(
+            id=1,
+            full_name='id 1 user',
+            email='email1@gmail.comS'
+        )
+        user.save()
