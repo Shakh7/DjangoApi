@@ -44,22 +44,22 @@ class QuoteSerializer(serializers.Serializer):
 
     origin = serializers.SerializerMethodField(method_name='get_departure')
     destination = serializers.SerializerMethodField(method_name='get_destination')
-    quote_clients = serializers.SerializerMethodField(method_name='get_quote_clients')
+    # quote_clients = serializers.SerializerMethodField(method_name='get_quote_clients')
 
     created_at = serializers.DateTimeField()
     notes = serializers.CharField()
 
-    def get_quote_clients(self, obj):
-        clients = []
-        for lead in obj.leads.all():
-            clients.append({
-                'client': {
-                    'id': lead.client.id,
-                    'full_name': lead.client.full_name,
-                },
-                'price': lead.price
-            })
-        return clients
+    # def get_quote_clients(self, obj):
+    #     clients = []
+    #     for lead in obj.leads.all():
+    #         clients.append({
+    #             'client': {
+    #                 'id': lead.client.id,
+    #                 'full_name': lead.client.full_name,
+    #             },
+    #             'price': lead.price
+    #         })
+    #     return clients
 
     def get_customer(self, obj):
         return {
