@@ -7,10 +7,10 @@ from django.db.models.functions import Concat
 
 class City(models.Model):
     zip_code = models.IntegerField()
-    city_name = models.CharField(max_length=100)
-    state_code = models.CharField(max_length=10)
-    state_name = models.CharField(max_length=100)
-    geo_point = models.CharField(max_length=100)
+    city_name = models.CharField(max_length=100, db_index=True)
+    state_code = models.CharField(max_length=10, db_index=True)
+    state_name = models.CharField(max_length=100, db_index=True)
+    geo_point = models.CharField(max_length=100, db_index=True)
 
     class Meta:
         unique_together = ('zip_code', 'city_name', 'state_name')

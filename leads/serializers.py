@@ -1,29 +1,49 @@
 from rest_framework import serializers
+from .models import Lead
+from quotes.models import Quote
+from users.models import CustomUser
 
 
 class LeadSerializer(serializers.Serializer):
-    id = serializers.CharField()
+    id = serializers.PrimaryKeyRelatedField(read_only=True)
+    client = serializers.SerializerMethodField(method_name='get_client')
+    quote = serializers.SerializerMethodField(method_name='get_quote')
     created_at = serializers.DateTimeField()
-    client = serializers.SerializerMethodField(method_name="get_client")
-    quote = serializers.SerializerMethodField(method_name="get_quote")
-    price = serializers.DecimalField(max_digits=10, decimal_places=2)
+    price = serializers.FloatField()
 
-    def get_client(self, lead):
+    def get_client(self, obj):
         return {
-            'id': lead.client.id,
-            'full_name': lead.client.full_name,
-            'email': lead.client.email
+            'id': obj.client.id,
+            'full_name': obj.client.full_name,
+            'email': obj.client.email
         }
 
-    def get_quote(self, lead):
+    def get_quote(self, obj):
         return {
-            'id': lead.quote.id,
-            'car_make': lead.quote.car_make.name,
-            'car_model': lead.quote.car_model.name,
-            'car_year': lead.quote.car_year,
-            'customer': {
-                'id': lead.quote.customer.id,
-                'full_name': lead.quote.customer.full_name,
-                'email': lead.quote.customer.email,
-            }
+            'id': obj.quote.id,
+            'created_at': obj.quote.created_at
         }
+
+
+class CreateLeadSerializer(serializers.Serializer):
+    client_id = serializers.IntegerField()
+    quote_id = serializers.CharField()
+    price = serializers.FloatField()
+
+    def validate(self, data):
+        # Ensure that the client ID and quote ID correspond to valid objects
+        try:
+            client = CustomUser.objects.get(id=data['client_id'], user_type='client')
+        except CustomUser.DoesNotExist:
+            raise serializers.ValidationError('Invalid client ID')
+
+        try:
+            quote = Quote.objects.get(id=data['quote_id'])
+        except Quote.DoesNotExist:
+            raise serializers.ValidationError('Invalid quote ID')
+
+        # Ensure that the price is a positive number
+        if data['price'] <= 0:
+            raise serializers.ValidationError('Price must be a positive number')
+
+        return data

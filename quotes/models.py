@@ -22,12 +22,12 @@ class Quote(models.Model):
     )
     pick_up_date = models.DateField(default=timezone.now)
 
-    car_make = models.ForeignKey(Car, on_delete=models.CASCADE)
-    car_model = models.ForeignKey(CarModel, on_delete=models.CASCADE)
+    car_make = models.ForeignKey(Car, on_delete=models.CASCADE, db_index=True)
+    car_model = models.ForeignKey(CarModel, on_delete=models.CASCADE, db_index=True)
     car_year = models.IntegerField(validators=[MinValueValidator(1900), MaxValueValidator(2100)])
 
-    origin = models.ForeignKey(City, on_delete=models.CASCADE, related_name='origin')
-    destination = models.ForeignKey(City, on_delete=models.CASCADE, related_name='destination')
+    origin = models.ForeignKey(City, on_delete=models.CASCADE, related_name='origin', db_index=True)
+    destination = models.ForeignKey(City, on_delete=models.CASCADE, related_name='destination', db_index=True)
 
     is_operable = models.BooleanField(default=True)
     notes = models.TextField(blank=True, null=True)
@@ -35,6 +35,9 @@ class Quote(models.Model):
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=['id'], name='unique_quote_id'),
+        ]
+        indexes = [
+            models.Index(fields=['car_make', 'car_model', 'origin', 'destination']),
         ]
 
     def clean(self):

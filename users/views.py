@@ -1,11 +1,22 @@
 # Create your views here.
+from django.core.cache import cache
 from rest_framework import permissions
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from helpers.auth import SessionAuthAPIListView, IsAdmin
 from .models import CustomUser as Users
 from .serializers import UserSerializer as UserSerializer
+
+
+class ClientListApiView(SessionAuthAPIListView):
+    permission_classes = [IsAdmin]
+    serializer_class = UserSerializer
+
+    def get_queryset(self):
+        queryset = Users.objects.filter(user_type='client')
+        return queryset
 
 
 class UserListApiView(APIView):

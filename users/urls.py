@@ -2,9 +2,10 @@
 from django.urls import path
 
 from .views import (
-    UserListApiView,
+    UserListApiView, ClientListApiView
 )
 
 urlpatterns = [
-    path('users', UserListApiView.as_view()),
+    path('users/', UserListApiView.as_view()),
+    path('clients/', ClientListApiView.as_view(), name='clients_list')
 ]
