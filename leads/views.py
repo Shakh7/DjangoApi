@@ -1,5 +1,4 @@
-from django.shortcuts import render
-from rest_framework import generics, status
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -8,6 +7,7 @@ from .models import Lead as Lead
 from helpers.auth import SessionAuthAPIListView, IsAdmin
 from users.models import CustomUser
 from quotes.models import Quote
+from django.db import IntegrityError
 
 
 class LeadListApiView(SessionAuthAPIListView):
@@ -17,12 +17,21 @@ class LeadListApiView(SessionAuthAPIListView):
     def get_queryset(self):
         queryset = Lead.objects \
             .select_related('client') \
-            .prefetch_related('quote__customer').all()
+            .prefetch_related('quote__customer') \
+            .order_by('-created_at') \
+            .all()
+
+        limit = self.request.query_params.get('limit')
+        offset = self.request.query_params.get('offset')
+
+        if limit and offset:
+            queryset = queryset[int(offset):int(offset) + int(limit)]
+        elif offset:
+            queryset = queryset[int(offset):]
+        elif limit:
+            queryset = queryset[:int(limit)]
 
         return queryset
-
-
-from django.db import IntegrityError
 
 
 class CreateLeadAPIView(APIView):
@@ -30,7 +39,6 @@ class CreateLeadAPIView(APIView):
     serializer_class = CreateLeadSerializer
 
     def post(self, request, *args, **kwargs):
-        errors = []
 
         for quote in request.data:
             serializer = self.serializer_class(data=quote)
@@ -39,8 +47,10 @@ class CreateLeadAPIView(APIView):
             client = CustomUser.objects.get(id=lead_data['client_id'])
             quote = Quote.objects.get(id=lead_data['quote_id'])
 
-            old_lead, new_lead = Lead.objects.get_or_create(client=client, quote=quote, price=lead_data['price'])
-            errors.append(old_lead.quote_id)
+            try:
+                Lead.objects.get_or_create(client=client, quote=quote, price=lead_data['price'])
+            except IntegrityError:
+                pass
 
         return Response(status=status.HTTP_201_CREATED)
 

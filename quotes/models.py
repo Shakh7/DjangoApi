@@ -8,6 +8,8 @@ from django.core.exceptions import ValidationError
 from users.models import CustomUser
 from users.models import CustomUser
 import uuid
+from django.core.cache import cache
+from helpers.telegram import notify_new_quote
 
 
 class Quote(models.Model):
@@ -21,14 +23,11 @@ class Quote(models.Model):
         blank=True, null=True
     )
     pick_up_date = models.DateField(default=timezone.now)
-
     car_make = models.ForeignKey(Car, on_delete=models.CASCADE, db_index=True)
     car_model = models.ForeignKey(CarModel, on_delete=models.CASCADE, db_index=True)
     car_year = models.IntegerField(validators=[MinValueValidator(1900), MaxValueValidator(2100)])
-
     origin = models.ForeignKey(City, on_delete=models.CASCADE, related_name='origin', db_index=True)
     destination = models.ForeignKey(City, on_delete=models.CASCADE, related_name='destination', db_index=True)
-
     is_operable = models.BooleanField(default=True)
     notes = models.TextField(blank=True, null=True)
 
@@ -45,24 +44,15 @@ class Quote(models.Model):
             raise ValidationError("Selected car model is not included in selected car's models.")
 
     def save(self, *args, **kwargs):
-        is_new_instance = not self.pk  # Check if this is a new instance or an update
+        is_new_instance = self.pk
 
         if is_new_instance:
             super().save(*args, **kwargs)
-            text = f'New lead ✅: \n\n' \
-                   f'Car Make: {self.car_make.name}\n' \
-                   f'Car Model: {self.car_model.name}\n' \
-                   f'Car Year: {self.car_year} \n' \
-                   f'Pick Up: {self.origin.zip_code} {self.origin.city_name}, {self.origin.state_code}\n' \
-                   f'Drop Off: {self.destination.zip_code} {self.destination.city_name}, {self.destination.state_code}\n' \
-                   f'Pick Up Date: {self.pick_up_date} \n' \
-                   f'Name: {self.customer.first_name} {self.customer.last_name}\n' \
-                   f'Email: {self.customer.email} \n\n' \
-                   f'Created At: {self.created_at}'
-            requests.get(
-                f'https://api.telegram.org/bot6170443565:AAGsnbPJfnLMWnTjHwth5O4hkosdQXb0O9E/sendMessage?chat_id=5000241789&text={text}&parse_mode=Markdown')
+            notify_new_quote(self)
         else:
             super().save(*args, **kwargs)
+
+        cache.delete('quote_list_cash')
 
     def __str__(self):
         return self.car_make.name + ', ' + self.car_model.name
