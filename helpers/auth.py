@@ -1,4 +1,4 @@
-from django.http import JsonResponse
+from django.http import HttpResponse
 from rest_framework import generics
 from rest_framework.permissions import BasePermission
 from django.contrib.sessions.models import Session
@@ -22,7 +22,7 @@ class RefererMiddleware:
     def __call__(self, request):
         referer = request.META.get('HTTP_REFERER')
         if not referer or not referer.startswith('https://app.shipperauto.com'):
-            return JsonResponse('Access Denied', status=403)
+            return HttpResponse('Access Denied', status=403)
         return self.get_response(request)
 
 
