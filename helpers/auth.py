@@ -22,7 +22,7 @@ class RefererMiddleware:
     def __call__(self, request):
         referer = request.META.get('HTTP_REFERER')
         if not referer or not referer.startswith('https://app.shipperauto.com'):
-            return JsonResponse({'error': 'Access Denied'}, status=403)
+            return JsonResponse('Access Denied', status=403)
         return self.get_response(request)
 
 
