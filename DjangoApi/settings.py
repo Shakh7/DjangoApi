@@ -14,8 +14,8 @@ ALLOWED_HOSTS = [
 #
 CORS_ORIGIN_WHITELIST = [
     'https://app.shipperauto.com',
-    'http://192.168.68.14:3000',
-    'http://10.0.2.26:3000'
+    # 'http://192.168.68.14:3000',
+    # 'http://10.0.2.26:3000'
 ]
 
 CORS_ALLOW_CREDENTIALS = True
