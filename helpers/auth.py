@@ -1,4 +1,4 @@
-from django.http import HttpResponseForbidden
+from django.http.response import HttpResponseForbidden
 from rest_framework import generics
 from rest_framework.permissions import BasePermission
 from django.contrib.sessions.models import Session
