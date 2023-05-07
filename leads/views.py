@@ -12,7 +12,7 @@ from django.core.cache import cache
 
 
 class LeadListApiView(SessionAuthAPIListView):
-    # permission_classes = [IsAdmin]
+    permission_classes = [IsAdmin]
     serializer_class = LeadSerializer
 
     def get_queryset(self):

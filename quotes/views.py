@@ -9,9 +9,11 @@ from .models import Quote as Quote
 from .serializers import QuoteSerializer as QuoteSerializer
 from django.db.models import Q, Count
 from django.core.cache import cache
+from helpers.auth import IsAdmin
 
 
 class QuoteListApiView(ListAPIView):
+    permission_classes = [IsAdmin]
     serializer_class = QuoteSerializer
 
     def get_queryset(self):
