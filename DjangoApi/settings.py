@@ -79,7 +79,7 @@ SIMPLE_JWT = {
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://:yourpassword@127.0.0.1:6379/0',
+        'LOCATION': 'redis://:wp1ntNoMWlPE2jyJN5rCoki6TS4j/F+795LQM4IE1Fp3kBWfwFoK8MvHRJgOD33OgVPY5oQwZxMRdfLM@127.0.0.1:6379/0',
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         },
