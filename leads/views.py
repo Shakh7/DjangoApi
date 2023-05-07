@@ -8,18 +8,26 @@ from helpers.auth import SessionAuthAPIListView, IsAdmin
 from users.models import CustomUser
 from quotes.models import Quote
 from django.db import IntegrityError
+from django.core.cache import cache
 
 
 class LeadListApiView(SessionAuthAPIListView):
-    permission_classes = [IsAdmin]
+    # permission_classes = [IsAdmin]
     serializer_class = LeadSerializer
 
     def get_queryset(self):
-        queryset = Lead.objects \
-            .select_related('client') \
-            .prefetch_related('quote__customer') \
-            .order_by('-created_at') \
-            .all()
+        queryset = cache.get('lead_queryset')
+
+        if queryset is None:
+            print('from db')
+            queryset = Lead.objects \
+                .select_related('client') \
+                .prefetch_related('quote__customer') \
+                .order_by('-created_at') \
+                .all()
+            cache.set('lead_queryset', queryset)
+        else:
+            print('from cache')
 
         limit = self.request.query_params.get('limit')
         offset = self.request.query_params.get('offset')

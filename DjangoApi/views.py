@@ -1,10 +1,18 @@
-from datetime import datetime
-
 from rest_framework_simplejwt.views import TokenVerifyView
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from users.models import CustomUser
 from rest_framework_simplejwt.exceptions import InvalidToken
 from rest_framework_simplejwt.views import TokenObtainPairView
-from users.models import CustomUser
+
+
+class MultiFactorAuthenticationBackend(JWTAuthentication):
+    def authenticate(self, request, **kwargs):
+        # Implement Multi-Factor authentication logic here
+        print(
+            "here i am"
+        )
+        pass
+
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):

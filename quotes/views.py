@@ -1,5 +1,5 @@
 from rest_framework import permissions
-from rest_framework.generics import CreateAPIView, RetrieveAPIView
+from rest_framework.generics import CreateAPIView, RetrieveAPIView, ListAPIView
 from rest_framework.response import Response
 from django.core.exceptions import ValidationError
 from cars.models import Car, CarModel
@@ -7,25 +7,22 @@ from city.models import City
 from customers.models import Customer
 from .models import Quote as Quote
 from .serializers import QuoteSerializer as QuoteSerializer
-from helpers.auth import SessionAuthAPIListView, IsAdmin
-from django.core.cache import cache
 from django.db.models import Q, Count
+from django.core.cache import cache
 
 
-class QuoteListApiView(SessionAuthAPIListView):
-    permission_classes = [IsAdmin]
+class QuoteListApiView(ListAPIView):
     serializer_class = QuoteSerializer
-    cache_key = 'quote_list_cash'
 
     def get_queryset(self):
-        queryset = cache.get(self.cache_key)
+        queryset = cache.get('quote_queryset')
 
         if queryset is None:
             queryset = Quote.objects \
                 .select_related('customer', 'car_make', 'car_model') \
                 .prefetch_related('leads', 'origin', 'destination') \
                 .order_by('-created_at')
-            cache.set(self.cache_key, queryset)
+            cache.set('quote_queryset', queryset)
 
         id = self.request.query_params.get('id')
         created_at = self.request.query_params.get('created_at')

@@ -11,11 +11,15 @@ DEBUG = True
 ALLOWED_HOSTS = [
     'api.shipperauto.com', '127.0.0.1'
 ]
+
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
+
 #
 CORS_ORIGIN_WHITELIST = [
     'https://app.shipperauto.com',
-    # 'http://192.168.68.14:3000',
-    # 'http://10.0.2.26:3000'
+    'http://192.168.0.102:3000',
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -29,8 +33,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'rest_framework_simplejwt.token_blacklist',
+    # 'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
+    'debug_toolbar',
 
     'users',
     'city.apps.CityConfig',
@@ -51,23 +56,37 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 50,
     'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-        'rest_framework.authentication.SessionAuthentication'
-    )
+    ),
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
 }
-
+#
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
 
     "ALGORITHM": "HS256",
     "SIGNING_KEY": SECRET_KEY,
+}
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://localhost:6379/0',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        },
+    },
 }
 
 ROOT_URLCONF = 'DjangoApi.urls'
