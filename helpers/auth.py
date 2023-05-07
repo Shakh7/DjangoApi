@@ -1,11 +1,8 @@
-from django.http import HttpResponse
 from rest_framework import generics
 from rest_framework.permissions import BasePermission
-from django.contrib.sessions.models import Session
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.exceptions import AuthenticationFailed
 
-from users.models import CustomUser as User
-from rest_framework_simplejwt.authentication import JWTAuthentication
 
 class IsAuthenticated(BasePermission):
     def has_permission(self, request, view):
