@@ -6,7 +6,7 @@ from datetime import timedelta
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-rp8%2$i)rvp&a1rpw1m^fk1ceo6)%z0lp-pz+gy)knnlj)b&1%'
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     'api.shipperauto.com', '127.0.0.1'
@@ -16,7 +16,6 @@ INTERNAL_IPS = [
     '127.0.0.1',
 ]
 
-#
 CORS_ORIGIN_WHITELIST = [
     'https://app.shipperauto.com',
     'http://192.168.0.102:3000',
@@ -65,10 +64,11 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 50,
     'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
-#
+
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
@@ -76,19 +76,6 @@ SIMPLE_JWT = {
     "ALGORITHM": "HS256",
     "SIGNING_KEY": SECRET_KEY,
 }
-
-CACHES = {
-    'default': {
-        'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://:LP6dW5QKHEkJb2YKary&7eTtzFYSvRLLksNdTB6vxJbJ&J4RsC@127.0.0.1:6379/0',
-        'OPTIONS': {
-            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-        },
-    },
-}
-
-SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
-SESSION_CACHE_ALIAS = 'default'
 
 ROOT_URLCONF = 'DjangoApi.urls'
 
@@ -113,27 +100,51 @@ WSGI_APPLICATION = 'DjangoApi.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 #
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'leads',
-#         'USER': 'shakh',
-#         'PASSWORD': 'ninny2023!',
-#         'HOST': 'localhost',
-#         'PORT': '',
-#     }
-# }
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'test',
-        'USER': 'dbuser',
-        'PASSWORD': 'cgv7i9rd9d6dv3opos20',
-        'HOST': 'localhost',
-        'PORT': '5432',
+if DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'leads',
+            'USER': 'shakh',
+            'PASSWORD': 'ninny2023!',
+            'HOST': 'localhost',
+            'PORT': '',
+        }
     }
-}
+    CACHES = {
+        'default': {
+            'BACKEND': 'django_redis.cache.RedisCache',
+            'LOCATION': 'redis://localhost:6379/0',
+            'OPTIONS': {
+                'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+            },
+        },
+    }
+else:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django_redis.cache.RedisCache',
+            'LOCATION': 'redis://:LP6dW5QKHEkJb2YKary&7eTtzFYSvRLLksNdTB6vxJbJ&J4RsC@127.0.0.1:6379/0',
+            'OPTIONS': {
+                'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+            },
+        },
+    }
+
+    SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+    SESSION_CACHE_ALIAS = 'default'
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'test',
+            'USER': 'dbuser',
+            'PASSWORD': 'cgv7i9rd9d6dv3opos20',
+            'HOST': 'localhost',
+            'PORT': '5432',
+        }
+    }
 
 AUTH_USER_MODEL = "users.CustomUser"
 
