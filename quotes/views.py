@@ -5,11 +5,13 @@ from django.core.exceptions import ValidationError
 from cars.models import Car, CarModel
 from city.models import City
 from customers.models import Customer
+from leads.models import Lead
 from .models import Quote as Quote
 from .serializers import QuoteSerializer as QuoteSerializer
-from django.db.models import Q, Count
-from django.core.cache import cache
+from django.db.models import Q, Count, Prefetch
 from helpers.auth import IsAdmin
+
+from django.core.cache import cache
 
 
 class QuoteListApiView(ListAPIView):
@@ -22,7 +24,10 @@ class QuoteListApiView(ListAPIView):
         if queryset is None:
             queryset = Quote.objects \
                 .select_related('customer', 'car_make', 'car_model') \
-                .prefetch_related('leads', 'origin', 'destination') \
+                .prefetch_related(
+                Prefetch('leads', queryset=Lead.objects.select_related('client')),
+                'origin', 'destination'
+            ) \
                 .order_by('-created_at')
             cache.set('quote_queryset', queryset)
 
