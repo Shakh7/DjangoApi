@@ -33,7 +33,10 @@ urlpatterns = [
     path('api/token/verify/', CustomTokenVerifyView.as_view(), name='token_verify'),
 
 ]
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 if settings.DEBUG:
-    path('admin/', admin.site.urls),
-    path('__debug__/', include(debug_toolbar.urls))
+    urlpatterns += [
+        path('admin/', admin.site.urls),
+        path('__debug__/', include(debug_toolbar.urls))
+    ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
