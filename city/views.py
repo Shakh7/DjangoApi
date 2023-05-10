@@ -5,12 +5,13 @@ from .serializers import CitySerializer
 import json
 from rest_framework.authentication import BasicAuthentication
 from helpers.auth import SessionAuthAPIListView
+from rest_framework.permissions import AllowAny
 
 
 class CityListView(SessionAuthAPIListView):
     queryset = City.objects.all()
     serializer_class = CitySerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
 
 class CitySearchView(SessionAuthAPIListView):
