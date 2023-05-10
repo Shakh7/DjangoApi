@@ -6,7 +6,7 @@ from datetime import timedelta
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-rp8%2$i)rvp&a1rpw1m^fk1ceo6)%z0lp-pz+gy)knnlj)b&1%'
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     'api.shipperauto.com', '127.0.0.1'
@@ -18,8 +18,10 @@ INTERNAL_IPS = [
 
 CORS_ORIGIN_WHITELIST = [
     'https://app.shipperauto.com',
+    'https://shipperauto.com',
     'http://192.168.0.102:3000',
-    'http://10.0.2.26:3000'
+    'http://10.0.2.26:3000',
+    'http://192.168.0.107:5173'
 ]
 
 CORS_ALLOW_CREDENTIALS = True
