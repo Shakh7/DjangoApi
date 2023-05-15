@@ -16,13 +16,14 @@ INTERNAL_IPS = [
     '127.0.0.1',
 ]
 
-CORS_ORIGIN_WHITELIST = [
-    'https://app.shipperauto.com',
-    'https://shipperauto.com',
-    'http://192.168.0.102:3000',
-    'http://10.0.2.26:3000',
-    'http://192.168.0.107:5173'
-]
+# CORS_ORIGIN_WHITELIST = [
+#     'https://app.shipperauto.com',
+#     'https://shipperauto.com',
+#     'http://192.168.0.102:3000',
+#     'http://10.0.2.26:3000',
+#     'http://192.168.0.107:5173',
+#     'http://10.0.2.26:5173'
+# ]
 
 CORS_ALLOW_CREDENTIALS = True
 
