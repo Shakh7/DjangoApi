@@ -11,12 +11,12 @@ from rest_framework.permissions import AllowAny
 class CityListView(SessionAuthAPIListView):
     queryset = City.objects.all()
     serializer_class = CitySerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
 
 class CitySearchView(SessionAuthAPIListView):
     serializer_class = CitySerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
         query = self.kwargs['search']
