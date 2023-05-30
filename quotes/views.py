@@ -6,6 +6,7 @@ from cars.models import Car, CarModel
 from city.models import City
 from customers.models import Customer
 from leads.models import Lead
+from users.models import CustomUser
 from .models import Quote as Quote
 from .serializers import QuoteSerializer as QuoteSerializer
 from django.db.models import Q, Count, Prefetch
@@ -114,13 +115,13 @@ class QuoteCreateView(CreateAPIView):
 
     def create(self, request, *args, **kwargs):
         data = request.data
-        car_make_id = data.get('car_make')
-        car_model_id = data.get('car_model')
+        car_make_id = data.get('car_make_id')
+        car_model_id = data.get('car_model_id')
         car_year = data.get('car_year')
-        print("car_year", request.data)
-        pick_up_address_id = data.get('pick_up_address')
-        drop_off_address_id = data.get('drop_off_address')
-        pick_up_date = data.get('pick_up_date')
+        is_operable = data.get('operable')
+        origin_id = data.get('origin_id')
+        destination_id = data.get('destination_id')
+        # pick_up_date = data.get('pick_up_date')
 
         first_name = data.get('first_name')
         last_name = data.get('last_name')
@@ -128,10 +129,14 @@ class QuoteCreateView(CreateAPIView):
 
         car_make = Car.objects.filter(id=car_make_id).first()
         car_model = CarModel.objects.filter(id=car_model_id).first()
-        pick_up_address = City.objects.filter(id=pick_up_address_id).first()
-        drop_off_address = City.objects.filter(id=drop_off_address_id).first()
-        customer, _ = Customer.objects.get_or_create(first_name=first_name, last_name=last_name, email=email)
-
+        pick_up_address = City.objects.filter(id=origin_id).first()
+        drop_off_address = City.objects.filter(id=destination_id).first()
+        customer, _ = CustomUser.objects.get_or_create(
+            full_name=first_name + ' ' + last_name,
+            email=email,
+        )
+        # customer.password = 'dpCC3pEryCnA6k4MT7XpMAvbEmub4piN6okY8YTQML'
+        # customer.save()
         if not car_make or not car_model or not pick_up_address or not drop_off_address:
             raise ValidationError("Invalid input data")
 
@@ -142,10 +147,12 @@ class QuoteCreateView(CreateAPIView):
             car_make=car_make,
             car_model=car_model,
             car_year=car_year,
-            pick_up_address=pick_up_address,
-            drop_off_address=drop_off_address,
-            pick_up_date=pick_up_date,
-            customer=customer
+            origin=pick_up_address,
+            destination=drop_off_address,
+            pick_up_date=None,
+            customer=customer,
+            is_operable=is_operable,
+
         )
         quote.save()
 

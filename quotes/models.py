@@ -22,7 +22,7 @@ class Quote(models.Model):
         limit_choices_to={'user_type': 'shipper'},
         blank=True, null=True
     )
-    pick_up_date = models.DateField(default=timezone.now)
+    pick_up_date = models.DateField(default=timezone.now, null=True, blank=True)
     car_make = models.ForeignKey(Car, on_delete=models.CASCADE, db_index=True)
     car_model = models.ForeignKey(CarModel, on_delete=models.CASCADE, db_index=True)
     car_year = models.IntegerField(validators=[MinValueValidator(1900), MaxValueValidator(2100)])
