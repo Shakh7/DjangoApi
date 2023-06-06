@@ -14,14 +14,11 @@ class QuoteSerializer(serializers.Serializer):
     quote_clients = serializers.SerializerMethodField(method_name='get_quote_clients')
 
     created_at = serializers.DateTimeField()
-    pick_up_date = serializers.DateField()
     is_operable = serializers.BooleanField()
 
     notes = serializers.CharField()
 
-    first_name = serializers.CharField()
-    last_name = serializers.CharField()
-    email = serializers.CharField()
+    shipper = serializers.IntegerField(source='shipper.id')
 
     def get_quote_clients(self, obj):
         clients = []

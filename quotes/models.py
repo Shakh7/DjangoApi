@@ -13,10 +13,21 @@ from helpers.telegram import notify_new_quote
 
 
 class Quote(models.Model):
+    DELIVERY_CHOICES = (
+        ('within_a_week', 'With in a week'),
+        ('specific_date', 'Specific Date'),
+        ('between_dates', 'Between Dates'),
+        ('flexible', 'Flexible'),
+        ('no_date', 'No date'),
+    )
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    pick_up_date = models.DateField(default=timezone.now, null=True, blank=True)
+    delivery_choice = models.CharField(max_length=50, choices=DELIVERY_CHOICES, default='no_date')
+
+    start_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
+
     car_make = models.ForeignKey(Car, on_delete=models.CASCADE, db_index=True)
     car_model = models.ForeignKey(CarModel, on_delete=models.CASCADE, db_index=True)
     car_year = models.IntegerField(validators=[MinValueValidator(1900), MaxValueValidator(2100)])
@@ -25,9 +36,15 @@ class Quote(models.Model):
     is_operable = models.BooleanField(default=True)
     notes = models.TextField(blank=True, null=True)
 
-    first_name = models.CharField(max_length=80, blank=True, null=True)
-    last_name = models.CharField(max_length=80, blank=True, null=True)
-    email = models.EmailField(blank=True, null=True)
+    shipper = models.ForeignKey(
+        CustomUser,
+        on_delete=models.SET_NULL,
+        related_name='quotes',
+        db_index=True,
+        null=True,
+        blank=True,
+        limit_choices_to={'user_type': 'shipper'}
+    )
 
     class Meta:
         constraints = [
@@ -40,6 +57,9 @@ class Quote(models.Model):
     def clean(self):
         if self.car_model not in self.car_make.models.all():
             raise ValidationError("Selected car model is not included in selected car's models.")
+        if self.start_date and self.end_date:
+            if self.start_date > self.end_date:
+                raise ValidationError("End date must be greater than start date.")
 
     def save(self, *args, **kwargs):
         is_new_instance = self.pk

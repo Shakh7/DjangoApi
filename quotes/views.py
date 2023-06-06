@@ -38,7 +38,6 @@ class QuoteListApiView(ListAPIView):
         origin = self.request.query_params.get('origin')
         destination = self.request.query_params.get('destination')
         customer = self.request.query_params.get('customer')
-        pick_up_date = self.request.query_params.get('pick_up_date')
         is_operable = self.request.query_params.get('is_operable')
         notes = self.request.query_params.get('notes')
         quote_clients_count = self.request.query_params.get('quote_clients')
@@ -77,9 +76,6 @@ class QuoteListApiView(ListAPIView):
                 Q(customer__full_name__icontains=customer) |
                 Q(customer__email__icontains=customer)
             )
-
-        if pick_up_date:
-            queryset = queryset.filter(pick_up_date__icontains=pick_up_date)
 
         if is_operable:
             query = True if is_operable == 'yes' else False
@@ -122,16 +118,25 @@ class QuoteCreateView(CreateAPIView):
         is_operable = data.get('operable')
         origin_id = data.get('origin_id')
         destination_id = data.get('destination_id')
-        # pick_up_date = data.get('pick_up_date')
+        delivery_choice = data.get('delivery_choice')
+        start_date = data.get('start_date')
+        end_date = data.get('end_date')
 
         first_name = data.get('first_name')
         last_name = data.get('last_name')
         email = data.get('email')
+        notes = data.get('comment')
 
         car_make = Car.objects.filter(id=car_make_id).first()
         car_model = CarModel.objects.filter(id=car_model_id).first()
         pick_up_address = City.objects.filter(id=origin_id).first()
         drop_off_address = City.objects.filter(id=destination_id).first()
+        shipper, _ = CustomUser.objects.get_or_create(
+            first_name=first_name,
+            last_name=last_name,
+            email=email,
+            user_type='shipper'
+        )
 
         if not car_make or not car_model or not pick_up_address or not drop_off_address:
             raise ValidationError("Invalid input data")
@@ -140,17 +145,17 @@ class QuoteCreateView(CreateAPIView):
             raise ValidationError("Selected car model is not included in selected car's models.")
 
         quote = Quote(
+            delivery_choice=delivery_choice,
+            start_date=start_date,
+            end_date=end_date,
             car_make=car_make,
             car_model=car_model,
             car_year=car_year,
             origin=pick_up_address,
             destination=drop_off_address,
-            pick_up_date=None,
             is_operable=is_operable,
-            first_name=first_name,
-            last_name=last_name,
-            email=email
-
+            shipper=shipper,
+            notes=notes
         )
 
         quote.save()
