@@ -33,9 +33,12 @@ urlpatterns = [
     path('api/token/verify/', CustomTokenVerifyView.as_view(), name='token_verify'),
 
 ]
+
+urlpatterns += [
+    path('admin/', admin.site.urls),
+]
 if settings.DEBUG:
     urlpatterns += [
-        path('admin/', admin.site.urls),
         path('__debug__/', include(debug_toolbar.urls))
     ]
 
