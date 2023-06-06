@@ -13,7 +13,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         ('client', 'Client'),  # is a person who buys quotes
         ('shipper', 'Shipper'),  # is a person who leaves quotes
     )
-    username = models.CharField(max_length=50, unique=True)
     first_name = models.CharField(_("first name"), max_length=80, blank=True)
     last_name = models.CharField(_("last name"), max_length=80, blank=True)
     email = models.EmailField(_("email address"), blank=True, null=True)
@@ -22,7 +21,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True, editable=False)
     date_joined = models.DateTimeField(default=timezone.now)
 
-    USERNAME_FIELD = "username"
+    USERNAME_FIELD = "id"
     REQUIRED_FIELDS = []
 
     objects = CustomUserManager()
