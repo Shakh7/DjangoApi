@@ -15,13 +15,7 @@ from helpers.telegram import notify_new_quote
 class Quote(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     created_at = models.DateTimeField(auto_now_add=True)
-    customer = models.ForeignKey(
-        CustomUser,
-        on_delete=models.CASCADE,
-        related_name='quotes',
-        limit_choices_to={'user_type': 'shipper'},
-        blank=True, null=True
-    )
+
     pick_up_date = models.DateField(default=timezone.now, null=True, blank=True)
     car_make = models.ForeignKey(Car, on_delete=models.CASCADE, db_index=True)
     car_model = models.ForeignKey(CarModel, on_delete=models.CASCADE, db_index=True)
@@ -30,6 +24,10 @@ class Quote(models.Model):
     destination = models.ForeignKey(City, on_delete=models.CASCADE, related_name='destination', db_index=True)
     is_operable = models.BooleanField(default=True)
     notes = models.TextField(blank=True, null=True)
+
+    first_name = models.CharField(max_length=80, blank=True, null=True)
+    last_name = models.CharField(max_length=80, blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
 
     class Meta:
         constraints = [

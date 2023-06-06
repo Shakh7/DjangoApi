@@ -114,6 +114,7 @@ class QuoteCreateView(CreateAPIView):
     serializer_class = QuoteSerializer
 
     def create(self, request, *args, **kwargs):
+
         data = request.data
         car_make_id = data.get('car_make_id')
         car_model_id = data.get('car_model_id')
@@ -131,12 +132,7 @@ class QuoteCreateView(CreateAPIView):
         car_model = CarModel.objects.filter(id=car_model_id).first()
         pick_up_address = City.objects.filter(id=origin_id).first()
         drop_off_address = City.objects.filter(id=destination_id).first()
-        customer, _ = CustomUser.objects.get_or_create(
-            full_name=first_name + ' ' + last_name,
-            email=email,
-        )
-        # customer.password = 'dpCC3pEryCnA6k4MT7XpMAvbEmub4piN6okY8YTQML'
-        # customer.save()
+
         if not car_make or not car_model or not pick_up_address or not drop_off_address:
             raise ValidationError("Invalid input data")
 
@@ -150,12 +146,14 @@ class QuoteCreateView(CreateAPIView):
             origin=pick_up_address,
             destination=drop_off_address,
             pick_up_date=None,
-            customer=customer,
             is_operable=is_operable,
+            first_name=first_name,
+            last_name=last_name,
+            email=email
 
         )
-        quote.save()
 
+        quote.save()
         serializer = self.get_serializer(quote)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=201, headers=headers)

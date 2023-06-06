@@ -12,13 +12,16 @@ class QuoteSerializer(serializers.Serializer):
     destination = serializers.SerializerMethodField(method_name='get_destination')
 
     quote_clients = serializers.SerializerMethodField(method_name='get_quote_clients')
-    customer = serializers.SerializerMethodField(method_name='get_customer')
 
     created_at = serializers.DateTimeField()
     pick_up_date = serializers.DateField()
     is_operable = serializers.BooleanField()
 
     notes = serializers.CharField()
+
+    first_name = serializers.CharField()
+    last_name = serializers.CharField()
+    email = serializers.CharField()
 
     def get_quote_clients(self, obj):
         clients = []
@@ -31,12 +34,6 @@ class QuoteSerializer(serializers.Serializer):
                 'price': lead.price
             })
         return clients
-
-    def get_customer(self, obj):
-        return {
-            'full_name': obj.customer.full_name,
-            'email': obj.customer.email
-        }
 
     def get_destination(self, obj):
         return {
