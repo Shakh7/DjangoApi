@@ -4,7 +4,6 @@ from rest_framework.response import Response
 from django.core.exceptions import ValidationError
 from cars.models import Car, CarModel
 from city.models import City
-from customers.models import Customer
 from leads.models import Lead
 from users.models import CustomUser
 from .models import Quote as Quote
@@ -13,6 +12,7 @@ from django.db.models import Q, Count, Prefetch
 from helpers.auth import IsAdmin
 
 from django.core.cache import cache
+from django.core.mail import send_mail
 
 
 class QuoteListApiView(ListAPIView):
@@ -159,6 +159,23 @@ class QuoteCreateView(CreateAPIView):
         )
 
         quote.save()
+
+        try:
+            send_mail(
+                "Shipping Request",
+                f"Dear {shipper.first_name},\n\n"
+                f"Thank you for choosing our car shipping service. "
+                f"We have received your request to ship your {car_year} {car_make} {car_model}.\n\n"
+                f"We will review your request and get back to you with further details shortly.\n\n"
+                f"Best regards,\n"
+                f"ShipperAuto.com",
+                "shakhzodbeksharipov2002@gmail.com",
+                [shipper.email],
+                fail_silently=False,
+            )
+        except :
+            pass
+
         serializer = self.get_serializer(quote)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=201, headers=headers)

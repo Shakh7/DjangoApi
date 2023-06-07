@@ -154,6 +154,15 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'shakhzodbeksharipov2002@gmail.com'
+EMAIL_HOST_PASSWORD = 'euhdogdovsfozmxk'
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'shakhzodbeksharipov2002@gmail.com'
+
+
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
