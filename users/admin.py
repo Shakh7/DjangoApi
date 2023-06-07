@@ -7,7 +7,7 @@ from .models import CustomUser as Users
 
 class CustomUserAdmin(admin.ModelAdmin):
     model = Users
-    list_display = ['username', 'first_name', 'last_name', 'email', 'user_type']
+    list_display = ['id', 'first_name', 'last_name', 'email', 'user_type']
 
 
 admin.site.register(Users, CustomUserAdmin)
