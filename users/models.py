@@ -17,7 +17,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         ('client', 'Client'),  # is a person who buys quotes
         ('shipper', 'Shipper'),  # is a person who leaves quotes
     )
-    username = models.CharField(max_length=220, unique=True)
+    # username = models.CharField(max_length=220, unique=True)
     first_name = models.CharField(_("first name"), max_length=80, blank=True)
     last_name = models.CharField(_("last name"), max_length=80, blank=True)
     email = models.EmailField(_("email address"))
@@ -26,17 +26,17 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True, editable=False)
     date_joined = models.DateTimeField(default=timezone.now)
 
-    USERNAME_FIELD = "username"
+    USERNAME_FIELD = "id"
     REQUIRED_FIELDS = []
 
     objects = CustomUserManager()
 
-    def save(self, *args, **kwargs):
-        if not self.username:
-            self.username = self.generate_username()
-        if not self.password:
-            self.set_password(generate_random_password())
-        return super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     if not self.username:
+    #         self.username = self.generate_username()
+    #     if not self.password:
+    #         self.set_password(generate_random_password())
+    #     return super().save(*args, **kwargs)
 
     def generate_username(self):
         username = f"{self.first_name.lower()}_{self.last_name.lower()}_{self.email}"
