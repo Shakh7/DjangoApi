@@ -13,8 +13,13 @@ class CarAdmin(admin.ModelAdmin):
 
 class CarModelAdmin(admin.ModelAdmin):
     model = CarModel
-    list_display = ['name']
+    list_display = ['car_name', 'name']
     search_fields = ['name']
+
+    def car_name(self, obj):
+        if obj.cars.exists():
+            return obj.cars.first().name
+        return ''
 
 
 admin.site.register(Car, CarAdmin)
