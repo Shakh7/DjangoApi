@@ -12,7 +12,6 @@ from django.db.models import Q, Count, Prefetch
 from helpers.auth import IsAdmin
 
 from django.core.cache import cache
-from django.core.mail import send_mail
 
 
 class QuoteListApiView(ListAPIView):
@@ -131,10 +130,12 @@ class QuoteCreateView(CreateAPIView):
         car_model = CarModel.objects.filter(id=car_model_id).first()
         pick_up_address = City.objects.filter(id=origin_id).first()
         drop_off_address = City.objects.filter(id=destination_id).first()
+
         shipper, _ = CustomUser.objects.get_or_create(
+            username=f'{first_name}_{last_name}_{email}',
+            email=email,
             first_name=first_name,
             last_name=last_name,
-            email=email,
             user_type='shipper'
         )
 
@@ -159,23 +160,6 @@ class QuoteCreateView(CreateAPIView):
         )
 
         quote.save()
-
-        try:
-            send_mail(
-                "Car Shipping Request",
-                f"Dear {shipper.first_name},\n\n"
-                f"Thank you for choosing our car shipping service. "
-                f"We have received your request to ship your {car_year} {car_make} {car_model}.\n\n"
-                f"We will review your request and get back to you with further details shortly.\n\n"
-                f"Best regards,\n"
-                f"ShipperAuto.com",
-                "shipperauto.com@gmail.com",
-                [shipper.email],
-                fail_silently=False,
-            )
-        except :
-            pass
-
         serializer = self.get_serializer(quote)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=201, headers=headers)
