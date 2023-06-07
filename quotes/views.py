@@ -162,14 +162,14 @@ class QuoteCreateView(CreateAPIView):
 
         try:
             send_mail(
-                "Shipping Request",
+                "Car Shipping Request",
                 f"Dear {shipper.first_name},\n\n"
                 f"Thank you for choosing our car shipping service. "
                 f"We have received your request to ship your {car_year} {car_make} {car_model}.\n\n"
                 f"We will review your request and get back to you with further details shortly.\n\n"
                 f"Best regards,\n"
                 f"ShipperAuto.com",
-                "shakhzodbeksharipov2002@gmail.com",
+                "shipperauto.com@gmail.com",
                 [shipper.email],
                 fail_silently=False,
             )
