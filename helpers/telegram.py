@@ -4,6 +4,22 @@ from django.core.mail import send_mail
 
 
 def notify_new_quote(quote):
+    try:
+        send_mail(
+            "Car Shipping Request",
+            f"Dear {quote.shipper.first_name},\n\n"
+            f"Thank you for choosing our car shipping service. "
+            f"We have received your request to ship your {quote.car_year} {quote.car_make} {quote.car_model}.\n\n"
+            f"We will review your request and get back to you with further details shortly.\n\n"
+            f"Best regards,\n"
+            f"ShipperAuto.com",
+            "shipperauto.com@gmail.com",
+            [quote.shipper.email],
+            fail_silently=True,
+        )
+    except:
+        pass
+
     token = load_env('APP_TELEGRAM_API_TOKEN')
     chat_id = load_env('APP_TELEGRAM_CHAT_ID')
     text = f'New lead ✅: \n\n' \
@@ -18,22 +34,6 @@ def notify_new_quote(quote):
     try:
         requests.get(
             f'https://api.telegram.org/bot{token}/sendMessage?chat_id={chat_id}&text={text}&parse_mode=Markdown')
-    except:
-        pass
-
-    try:
-        send_mail(
-            "Car Shipping Request",
-            f"Dear {quote.shipper.first_name},\n\n"
-            f"Thank you for choosing our car shipping service. "
-            f"We have received your request to ship your {quote.car_year} {quote.car_make} {quote.car_model}.\n\n"
-            f"We will review your request and get back to you with further details shortly.\n\n"
-            f"Best regards,\n"
-            f"ShipperAuto.com",
-            "shipperauto.com@gmail.com",
-            [quote.shipper.email],
-            fail_silently=False,
-        )
     except:
         pass
 

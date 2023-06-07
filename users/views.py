@@ -1,6 +1,5 @@
-# Create your views here.
-from django.core.cache import cache
-from rest_framework import permissions
+from django.utils.crypto import get_random_string
+from rest_framework import permissions, serializers
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -8,6 +7,13 @@ from rest_framework.views import APIView
 from helpers.auth import SessionAuthAPIListView, IsAdmin
 from .models import CustomUser as Users
 from .serializers import UserSerializer as UserSerializer
+
+from django.core.mail import EmailMultiAlternatives
+from django.http import HttpResponseBadRequest
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from users.helpers import send_email_confirmation
 
 
 class ClientListApiView(SessionAuthAPIListView):
@@ -40,3 +46,8 @@ class UserListApiView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+def confirm_email(request):
+    return send_email_confirmation.confirm_email(request)
