@@ -18,7 +18,7 @@ class QuoteSerializer(serializers.Serializer):
 
     notes = serializers.CharField()
 
-    shipper = serializers.IntegerField(source='shipper.id')
+    shipper = serializers.SerializerMethodField(method_name='get_shipper')
 
     def get_quote_clients(self, obj):
         clients = []
@@ -38,6 +38,14 @@ class QuoteSerializer(serializers.Serializer):
             'city_name': obj.destination.city_name,
             'state_name': obj.destination.state_name,
             'state_code': obj.destination.state_code,
+        }
+
+    def get_shipper(self, obj):
+        return {
+            'username': obj.shipper.username,
+            'first_name': obj.shipper.first_name,
+            'last_name': obj.shipper.last_name,
+            'email': obj.shipper.email,
         }
 
     def get_departure(self, obj):
