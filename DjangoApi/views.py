@@ -25,7 +25,7 @@ class CustomTokenVerifyView(TokenVerifyView):
 
     def post(self, request, *args, **kwargs):
         response = super().post(request, *args, **kwargs)
-        token = request.headers.get('token', None)
+        token = request.data.get('token', None)
 
         if token is not None:
             try:
