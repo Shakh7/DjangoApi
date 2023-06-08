@@ -23,11 +23,9 @@ class QuoteListApiView(ListAPIView):
 
         if queryset is None:
             queryset = Quote.objects \
-                .select_related('customer', 'car_make', 'car_model') \
-                .prefetch_related(
-                Prefetch('leads', queryset=Lead.objects.select_related('client')),
-                'origin', 'destination'
-            ) \
+                .select_related('shipper', 'car_make', 'car_model') \
+                .prefetch_related(Prefetch('leads', queryset=Lead.objects.select_related('client')),
+                                  'origin', 'destination') \
                 .order_by('-created_at')
             cache.set('quote_queryset', queryset)
 
@@ -36,7 +34,7 @@ class QuoteListApiView(ListAPIView):
         car_make = self.request.query_params.get('car_make')
         origin = self.request.query_params.get('origin')
         destination = self.request.query_params.get('destination')
-        customer = self.request.query_params.get('customer')
+        shipper = self.request.query_params.get('customer')
         is_operable = self.request.query_params.get('is_operable')
         notes = self.request.query_params.get('notes')
         quote_clients_count = self.request.query_params.get('quote_clients')
@@ -70,10 +68,11 @@ class QuoteListApiView(ListAPIView):
                 Q(destination__state_name__icontains=destination)
             )
 
-        if customer:
+        if shipper:
             queryset = queryset.filter(
-                Q(customer__full_name__icontains=customer) |
-                Q(customer__email__icontains=customer)
+                Q(shipper__first_name__icontains=shipper) |
+                Q(shipper__last_name__icontains=shipper) |
+                Q(shipper__email__icontains=shipper)
             )
 
         if is_operable:
