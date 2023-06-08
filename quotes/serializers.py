@@ -42,7 +42,7 @@ class QuoteSerializer(serializers.Serializer):
 
     def get_shipper(self, obj):
         return {
-            'username': obj.shipper.username,
+            'id': obj.shipper.id,
             'first_name': obj.shipper.first_name,
             'last_name': obj.shipper.last_name,
             'email': obj.shipper.email,
