@@ -36,7 +36,8 @@ class CustomTokenVerifyView(TokenVerifyView):
                     'id': user.id,
                     'full_name': user.full_name,
                     'user_type': user.user_type,
-                    'email': user.email
+                    'email': user.email,
+                    'username': user.username,
                 }
                 response.data['user'] = user_info
                 response.data['access'] = token
