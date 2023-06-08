@@ -34,7 +34,7 @@ class CustomTokenVerifyView(TokenVerifyView):
                 user = CustomUser.objects.get(id=user_id)
                 user_info = {
                     'id': user.id,
-                    'full_name': user.full_name,
+                    'full_name': user.get_full_name(),
                     'user_type': user.user_type,
                     'email': user.email,
                     'username': user.username,
