@@ -19,6 +19,7 @@ INTERNAL_IPS = [
 CORS_ALLOWED_ORIGINS = [
     'https://app.shipperauto.com',
     'https://shipperauto.com',
+    '*'
 ]
 
 CORS_ALLOW_ALL_ORIGINS = False
