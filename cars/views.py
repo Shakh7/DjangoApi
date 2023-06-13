@@ -22,7 +22,10 @@ class CarSearchView(SessionAuthAPIListView):
             queries = search_query.split()  # Split search query into individual words
             query = Q()
             for keyword in queries:
-                query |= Q(name__icontains=keyword.strip()) | Q(models__name__icontains=keyword.strip())
+                query &= (
+                        Q(name__icontains=keyword.strip()) |
+                        Q(models__name__icontains=keyword.strip())
+                )
 
             return Car.objects.filter(query).prefetch_related('models').distinct()
         else:
