@@ -19,7 +19,9 @@ class CarSearchView(SessionAuthAPIListView):
     def get_queryset(self):
         query = self.kwargs['search']
         if query:
-            return Car.objects.filter(Q(name__icontains=query) | Q(models__name__icontains=query)).prefetch_related(
-                'models').distinct()
+            return Car.objects.filter(
+                Q(name__icontains=query.strip()) |
+                Q(models__name__icontains=query.strip())
+            ).prefetch_related('models').distinct()
         else:
             return Car.objects.all()
