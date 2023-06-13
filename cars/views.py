@@ -17,11 +17,13 @@ class CarSearchView(SessionAuthAPIListView):
     permission_classes = [AllowAny]
 
     def get_queryset(self):
-        query = self.kwargs['search']
-        if query:
-            return Car.objects.filter(
-                Q(name__icontains=query.strip()) |
-                Q(models__name__icontains=query.strip())
-            ).prefetch_related('models').distinct()
+        search_query = self.kwargs['search']
+        if search_query:
+            queries = search_query.split()  # Split search query into individual words
+            query = Q()
+            for keyword in queries:
+                query |= Q(name__icontains=keyword.strip()) | Q(models__name__icontains=keyword.strip())
+
+            return Car.objects.filter(query).prefetch_related('models').distinct()
         else:
             return Car.objects.all()
