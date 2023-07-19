@@ -6,7 +6,7 @@ from datetime import timedelta
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-rp8%2$i)rvp&a1rpw1m^fk1ceo6)%z0lp-pz+gy)knnlj)b&1%'
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     'api.shipperauto.com', '127.0.0.1',
@@ -101,7 +101,7 @@ WSGI_APPLICATION = 'DjangoApi.wsgi.application'
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 SESSION_CACHE_ALIAS = 'default'
 
-if not DEBUG:
+if DEBUG:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
