@@ -8,7 +8,7 @@ SETTINGS_PATH = os.path.dirname(os.path.dirname(__file__))
 
 SECRET_KEY = 'django-insecure-rp8%2$i)rvp&a1rpw1m^fk1ceo6)%z0lp-pz+gy)knnlj)b&1%'
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     'api.shipperauto.com', '127.0.0.1',
@@ -109,10 +109,9 @@ WSGI_APPLICATION = 'DjangoApi.wsgi.application'
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 SESSION_CACHE_ALIAS = 'default'
 
-CELERY_RESULT_BACKEND = 'redis://:redis1234@127.0.0.1:6379/'
-CELERY_BROKER_URL = 'redis://:redis1234@127.0.0.1:6379/'
-
 if DEBUG:
+    CELERY_RESULT_BACKEND = 'redis://:redis1234@127.0.0.1:6379/'
+    CELERY_BROKER_URL = 'redis://:redis1234@127.0.0.1:6379/'
 
     DATABASES = {
         'default': {
@@ -134,10 +133,14 @@ if DEBUG:
         },
     }
 else:
+
+    CELERY_RESULT_BACKEND = 'redis://:LP6dW5QKHEkJb2YKary&7eTtzFYSvRLLksNdTB6vxJbJ&J4RsC@127.0.0.1:6379/0'
+    CELERY_BROKER_URL = CELERY_RESULT_BACKEND
+
     CACHES = {
         'default': {
             'BACKEND': 'django_redis.cache.RedisCache',
-            'LOCATION': 'redis://:LP6dW5QKHEkJb2YKary&7eTtzFYSvRLLksNdTB6vxJbJ&J4RsC@127.0.0.1:6379/0',
+            'LOCATION': CELERY_BROKER_URL,
             'OPTIONS': {
                 'CLIENT_CLASS': 'django_redis.client.DefaultClient',
             },
