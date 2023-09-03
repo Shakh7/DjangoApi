@@ -3,6 +3,7 @@ from .models import Vehicle, VehicleMake
 from .serializers import VehicleSerializer, VehicleMakeSerializer
 from .filters import VehicleFilter, MakeFilter
 from .tasks import create_vehicle
+from time import sleep
 
 
 class VehicleViewSet(viewsets.ModelViewSet):
@@ -46,6 +47,7 @@ class VehicleRegisterViewSet(viewsets.ModelViewSet):
             data = json.load(json_file)
 
         for item in data["results"]:
+            sleep(120)
             create_vehicle.delay(item)
 
         return VehicleMake.objects.all().order_by('name')
