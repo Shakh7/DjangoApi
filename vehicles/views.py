@@ -36,7 +36,7 @@ class VehicleRegisterViewSet(viewsets.ModelViewSet):
     queryset = VehicleMake.objects.all().order_by('name')
     serializer_class = VehicleMakeSerializer
 
-    def get(self):
+    def get_queryset(self):
         import os
         import json
         current_directory = os.path.dirname(os.path.abspath(__file__))
