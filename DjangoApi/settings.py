@@ -4,13 +4,16 @@ from pathlib import Path
 from datetime import timedelta
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+SETTINGS_PATH = os.path.dirname(os.path.dirname(__file__))
+
 SECRET_KEY = 'django-insecure-rp8%2$i)rvp&a1rpw1m^fk1ceo6)%z0lp-pz+gy)knnlj)b&1%'
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     'api.shipperauto.com', '127.0.0.1',
     'keywords.shipperauto.com',
+    'localhost'
 ]
 
 INTERNAL_IPS = [
@@ -36,6 +39,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework_simplejwt',
     'debug_toolbar',
+    'django_filters',
 
     'users',
     'city.apps.CityConfig',
@@ -43,6 +47,7 @@ INSTALLED_APPS = [
     'customers.apps.CustomersConfig',
     'quotes.apps.QuotesConfig',
     'leads.apps.LeadsConfig',
+    'vehicles.apps.VehiclesConfig',
 ]
 
 MIDDLEWARE = [
@@ -61,9 +66,12 @@ MIDDLEWARE = [
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 50,
+    'PAGE_SIZE': 100,
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
     ),
 }
 
@@ -101,13 +109,17 @@ WSGI_APPLICATION = 'DjangoApi.wsgi.application'
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 SESSION_CACHE_ALIAS = 'default'
 
+CELERY_RESULT_BACKEND = 'redis://:redis1234@127.0.0.1:6379/'
+CELERY_BROKER_URL = 'redis://:redis1234@127.0.0.1:6379/'
+
 if DEBUG:
+
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
             'NAME': 'leads',
-            'USER': 'shakh',
-            'PASSWORD': 'ninny2023!',
+            'USER': 'postgres',
+            'PASSWORD': 'test1234',
             'HOST': 'localhost',
             'PORT': '',
         }
@@ -115,7 +127,7 @@ if DEBUG:
     CACHES = {
         'default': {
             'BACKEND': 'django_redis.cache.RedisCache',
-            'LOCATION': 'redis://:localrediscode@127.0.0.1:6379/',
+            'LOCATION': 'redis://:redis1234@127.0.0.1:6379/',
             'OPTIONS': {
                 'CLIENT_CLASS': 'django_redis.client.DefaultClient',
             },
@@ -141,6 +153,10 @@ else:
             'PORT': '5432',
         }
     }
+
+CELERY_TIMEZONE = "UTC"
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
 
 AUTH_USER_MODEL = "users.CustomUser"
 

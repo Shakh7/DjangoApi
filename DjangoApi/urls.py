@@ -28,6 +28,7 @@ urlpatterns = [
     path('api/', include('leads.urls')),
     path('api/', include('city.urls')),
     path('api/', include('cars.urls')),
+    path('api/', include('vehicles.urls')),
 
     path('api/token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/verify/', CustomTokenVerifyView.as_view(), name='token_verify'),
