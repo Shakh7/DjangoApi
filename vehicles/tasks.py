@@ -6,6 +6,7 @@ from .models import Vehicle, VehicleMake
 @shared_task
 def create_vehicle(item):
     try:
+        Vehicle.objects.all().delete()
         make_name = item["Make"]
         year = item["Year"]
         model = item["Model"]
