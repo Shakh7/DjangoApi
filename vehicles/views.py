@@ -47,3 +47,5 @@ class VehicleRegisterViewSet(viewsets.ModelViewSet):
 
         for item in data["results"]:
             create_vehicle.delay(item)
+
+        return VehicleMake.objects.all().order_by('name')
