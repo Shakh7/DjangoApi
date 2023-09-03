@@ -8,7 +8,7 @@ SETTINGS_PATH = os.path.dirname(os.path.dirname(__file__))
 
 SECRET_KEY = 'django-insecure-rp8%2$i)rvp&a1rpw1m^fk1ceo6)%z0lp-pz+gy)knnlj)b&1%'
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     'api.shipperauto.com', '127.0.0.1',
@@ -109,7 +109,7 @@ WSGI_APPLICATION = 'DjangoApi.wsgi.application'
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 SESSION_CACHE_ALIAS = 'default'
 
-if DEBUG:
+if not DEBUG:
     CELERY_RESULT_BACKEND = 'redis://:redis1234@127.0.0.1:6379/'
     CELERY_BROKER_URL = 'redis://:redis1234@127.0.0.1:6379/'
 
