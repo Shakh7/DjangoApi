@@ -38,6 +38,8 @@ class VehicleRegisterViewSet(viewsets.ModelViewSet):
     serializer_class = VehicleMakeSerializer
 
     def get_queryset(self):
+        Vehicle.objects.all().delete()
+        VehicleMake.objects.all().delete()
         import os
         import json
         current_directory = os.path.dirname(os.path.abspath(__file__))
@@ -46,8 +48,6 @@ class VehicleRegisterViewSet(viewsets.ModelViewSet):
         with open(json_file_path, 'r') as json_file:
             data = json.load(json_file)
 
-        for item in data["results"]:
-            sleep(120)
-            create_vehicle.delay(item)
+        create_vehicle.delay(data["results"])
 
         return VehicleMake.objects.all().order_by('name')
