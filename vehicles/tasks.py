@@ -7,7 +7,6 @@ from .models import Vehicle, VehicleMake
 def create_vehicle(items):
     for item in items:
         try:
-            Vehicle.objects.all().delete()
             make_name = item["Make"]
             year = item["Year"]
             model = item["Model"]
